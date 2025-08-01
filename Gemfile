@@ -35,6 +35,13 @@ gem "thruster", require: false
 # Use Rack CORS for handling Cross-Origin Resource Sharing (CORS), making cross-origin Ajax possible
 # gem "rack-cors"
 
+group :development do
+  gem "rubocop", "~> 1.79", require: false
+  gem "rubocop-rails", "~> 2.32", require: false
+  gem "rubocop-rspec", "~> 3.6", require: false
+  gem "rubocop-performance", "~> 1.25", require: false
+end
+
 group :development, :test do
   # See https://guides.rubyonrails.org/debugging_rails_applications.html#debugging-with-the-debug-gem
   gem "debug", platforms: %i[ mri windows ], require: "debug/prelude"
@@ -44,4 +51,12 @@ group :development, :test do
 
   # Omakase Ruby styling [https://github.com/rails/rubocop-rails-omakase/]
   gem "rubocop-rails-omakase", require: false
+
+  gem "rspec-rails", "~> 8.0"
+  gem "factory_bot_rails", "~> 6.5"
+  gem "faker", "~> 3.5"
+end
+
+group :test do
+  gem "shoulda-matchers", "~> 6.5"
 end
