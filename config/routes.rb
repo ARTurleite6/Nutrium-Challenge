@@ -8,4 +8,5 @@ Rails.application.routes.draw do
   # Defines the root path route ("/")
   # root "posts#index"
   resources :nutritionist_services, as: :nutritionists, only: :index
+  resources :appointments, only: :create
 end
