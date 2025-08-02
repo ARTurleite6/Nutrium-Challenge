@@ -16,7 +16,7 @@ class CreateAppointmentService
 
     appointment = Appointment.create!(guest:, nutritionist_service_id: appointment_params[:nutritionist_service_id], event_date: appointment_params[:event_date])
     Result.new({ success?: true, appointment: })
-  rescue ActiveRecord::RecordNotFound => e
+  rescue ActiveRecord::RecordInvalid => e
     Result.new({ success?: false, errors: e.record&.errors&.full_messages })
   end
 

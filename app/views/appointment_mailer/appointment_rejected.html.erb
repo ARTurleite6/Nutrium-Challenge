@@ -1,0 +1,211 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <style>
+      body {
+        font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+        line-height: 1.6;
+        color: #333;
+        max-width: 600px;
+        margin: 0 auto;
+        padding: 20px;
+        background-color: #f8f9fa;
+      }
+      .email-container {
+        background-color: white;
+        border-radius: 8px;
+        overflow: hidden;
+        box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+      }
+      .header {
+        background: linear-gradient(135deg, #6c757d 0%, #495057 100%);
+        color: white;
+        padding: 30px 20px;
+        text-align: center;
+      }
+      .header h1 {
+        margin: 0;
+        font-size: 24px;
+        font-weight: 600;
+      }
+      .header p {
+        margin: 10px 0 0 0;
+        opacity: 0.9;
+        font-size: 16px;
+      }
+      .content {
+        padding: 30px 20px;
+      }
+      .status-card {
+        background-color: #fff3cd;
+        border: 1px solid #ffeaa7;
+        border-left: 4px solid #ffc107;
+        border-radius: 6px;
+        padding: 20px;
+        margin: 20px 0;
+        text-align: center;
+      }
+      .appointment-card {
+        background-color: #f8f9fa;
+        border: 1px solid #dee2e6;
+        border-radius: 6px;
+        padding: 20px;
+        margin: 20px 0;
+      }
+      .detail-row {
+        display: flex;
+        margin: 12px 0;
+        align-items: center;
+      }
+      .detail-icon {
+        width: 20px;
+        margin-right: 12px;
+        font-size: 16px;
+      }
+      .detail-label {
+        font-weight: 600;
+        color: #555;
+        min-width: 100px;
+      }
+      .detail-value {
+        color: #333;
+        flex: 1;
+      }
+      .suggestions-box {
+        background-color: #e3f2fd;
+        border: 1px solid #bbdefb;
+        border-left: 4px solid #2196F3;
+        border-radius: 6px;
+        padding: 20px;
+        margin: 20px 0;
+      }
+      .suggestions-box h4 {
+        margin: 0 0 15px 0;
+        color: #1565c0;
+      }
+      .suggestions-list {
+        margin: 0;
+        padding-left: 20px;
+      }
+      .suggestions-list li {
+        margin: 8px 0;
+        color: #1565c0;
+      }
+      .cta-section {
+        text-align: center;
+        margin: 30px 0;
+        padding: 20px;
+        background-color: #f8f9fa;
+        border-radius: 6px;
+      }
+      .btn {
+        display: inline-block;
+        padding: 12px 24px;
+        background-color: #007bff;
+        color: white;
+        text-decoration: none;
+        border-radius: 6px;
+        font-weight: 600;
+        margin: 5px;
+      }
+      .btn-secondary {
+        background-color: #6c757d;
+      }
+      .footer {
+        text-align: center;
+        padding: 20px;
+        color: #666;
+        font-size: 14px;
+        border-top: 1px solid #eee;
+      }
+      @media only screen and (max-width: 600px) {
+        body { padding: 10px; }
+        .content { padding: 20px 15px; }
+        .detail-row { flex-direction: column; align-items: flex-start; }
+        .detail-label { min-width: auto; margin-bottom: 5px; }
+        .btn { display: block; margin: 10px 0; }
+      }
+    </style>
+  </head>
+  <body>
+    <div class="email-container">
+      <div class="header">
+        <h1>📅 Appointment Request Update</h1>
+        <p>We have an update regarding your appointment request</p>
+      </div>
+      
+      <div class="content">
+        <p>Hello <%= @guest.name %>,</p>
+        
+        <p>Thank you for your interest in scheduling an appointment with <strong><%= @nutritionist.name %></strong>. Unfortunately, they are unable to accommodate your requested time slot.</p>
+        
+        <div class="status-card">
+          <h3 style="margin: 0 0 10px 0; color: #856404;">⚠️ Request Not Available</h3>
+          <p style="margin: 0; color: #856404;">Your requested appointment time is not available, but we have alternatives!</p>
+        </div>
+        
+        <div class="appointment-card">
+          <h3 style="margin: 0 0 15px 0; color: #333;">📋 Your Original Request</h3>
+          
+          <div class="detail-row">
+            <span class="detail-icon">👩‍⚕️</span>
+            <span class="detail-label">Nutritionist:</span>
+            <span class="detail-value"><%= @nutritionist.name %></span>
+          </div>
+          
+          <div class="detail-row">
+            <span class="detail-icon">🩺</span>
+            <span class="detail-label">Service:</span>
+            <span class="detail-value"><%= @service.name %></span>
+          </div>
+          
+          <div class="detail-row">
+            <span class="detail-icon">📅</span>
+            <span class="detail-label">Requested Date:</span>
+            <span class="detail-value"><%= @appointment.event_date.strftime("%A, %B %d, %Y at %I:%M %p") %></span>
+          </div>
+          
+          <div class="detail-row">
+            <span class="detail-icon">💰</span>
+            <span class="detail-label">Investment:</span>
+            <span class="detail-value">€<%= sprintf('%.2f', @appointment.nutritionist_service.pricing) %></span>
+          </div>
+        </div>
+        
+        <div class="suggestions-box">
+          <h4>🔍 What You Can Do Next</h4>
+          <ul class="suggestions-list">
+            <li><strong>Try a different time:</strong> Consider requesting a different date or time slot with the same nutritionist</li>
+            <li><strong>Browse other nutritionists:</strong> Explore our other qualified professionals who offer the same service</li>
+            <li><strong>Join the waitlist:</strong> We can notify you if this time slot becomes available</li>
+            <li><strong>Get recommendations:</strong> Our team can suggest the best available alternatives for your needs</li>
+          </ul>
+        </div>
+        
+        <div class="cta-section">
+          <h4 style="margin: 0 0 15px 0; color: #333;">🚀 Ready to Find Your Perfect Appointment?</h4>
+          <p style="margin: 15px 0; color: #666;">Don't let this stop you from achieving your health goals!</p>
+          
+          <a href="#" class="btn">Browse Available Times</a>
+          <a href="#" class="btn btn-secondary">Find Other Nutritionists</a>
+        </div>
+        
+        <p><strong>Remember:</strong> You can submit a new appointment request at any time. Each new request will cancel any previous pending requests, so you'll always have the most up-to-date booking in our system.</p>
+        
+        <p>We understand this might be disappointing, but we're committed to helping you find the perfect nutritionist match. Our team is here to support you every step of the way.</p>
+        
+        <p>Thank you for choosing Nutrium for your nutrition journey!</p>
+        
+        <p>Best regards,<br>
+        <strong>The Nutrium Team</strong></p>
+      </div>
+      
+      <div class="footer">
+        <p>Request processed on <%= @appointment.updated_at.strftime("%B %d, %Y at %I:%M %p") %></p>
+        <p style="color: #999; font-size: 12px;">Nutrium - Your Nutrition Partner</p>
+      </div>
+    </div>
+  </body>
+</html>

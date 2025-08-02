@@ -23,10 +23,10 @@ RSpec.describe 'Appointments', type: :request do
             post appointments_path, params: valid_params, as: :json
           }.to change(Appointment, :count).by(1)
           expect(response).to have_http_status(:created)
-          expect(json['appointment']).to include(
+          expect(json).to include(
             'id',
-            'guest_id',
-            'nutritionist_service_id',
+            'guest',
+            'nutritionist_service',
             'event_date'
           )
         end

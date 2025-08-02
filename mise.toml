@@ -1,3 +1,4 @@
 [tools]
 postgres = "latest"
+redis = "latest"
 ruby = "latest"

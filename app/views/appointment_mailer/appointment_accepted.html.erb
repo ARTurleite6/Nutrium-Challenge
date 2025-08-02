@@ -1,0 +1,199 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <style>
+      body {
+        font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+        line-height: 1.6;
+        color: #333;
+        max-width: 600px;
+        margin: 0 auto;
+        padding: 20px;
+        background-color: #f8f9fa;
+      }
+      .email-container {
+        background-color: white;
+        border-radius: 8px;
+        overflow: hidden;
+        box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+      }
+      .header {
+        background: linear-gradient(135deg, #4CAF50 0%, #45a049 100%);
+        color: white;
+        padding: 30px 20px;
+        text-align: center;
+      }
+      .header h1 {
+        margin: 0;
+        font-size: 24px;
+        font-weight: 600;
+      }
+      .header p {
+        margin: 10px 0 0 0;
+        opacity: 0.9;
+        font-size: 16px;
+      }
+      .content {
+        padding: 30px 20px;
+      }
+      .appointment-card {
+        background-color: #f8fffe;
+        border: 1px solid #e8f5e8;
+        border-left: 4px solid #4CAF50;
+        border-radius: 6px;
+        padding: 20px;
+        margin: 20px 0;
+      }
+      .detail-row {
+        display: flex;
+        margin: 12px 0;
+        align-items: center;
+      }
+      .detail-icon {
+        width: 20px;
+        margin-right: 12px;
+        font-size: 16px;
+      }
+      .detail-label {
+        font-weight: 600;
+        color: #555;
+        min-width: 100px;
+      }
+      .detail-value {
+        color: #333;
+        flex: 1;
+      }
+      .cta-section {
+        text-align: center;
+        margin: 30px 0;
+        padding: 20px;
+        background-color: #f8f9fa;
+        border-radius: 6px;
+      }
+      .btn {
+        display: inline-block;
+        padding: 12px 24px;
+        background-color: #4CAF50;
+        color: white;
+        text-decoration: none;
+        border-radius: 6px;
+        font-weight: 600;
+        margin: 0 10px;
+      }
+      .btn-secondary {
+        background-color: #6c757d;
+      }
+      .footer {
+        text-align: center;
+        padding: 20px;
+        color: #666;
+        font-size: 14px;
+        border-top: 1px solid #eee;
+      }
+      .tips {
+        background-color: #fff3cd;
+        border: 1px solid #ffeaa7;
+        border-radius: 6px;
+        padding: 15px;
+        margin: 20px 0;
+      }
+      .tips h4 {
+        margin: 0 0 10px 0;
+        color: #856404;
+      }
+      .tips ul {
+        margin: 0;
+        padding-left: 20px;
+      }
+      .tips li {
+        margin: 5px 0;
+        color: #856404;
+      }
+      @media only screen and (max-width: 600px) {
+        body { padding: 10px; }
+        .content { padding: 20px 15px; }
+        .detail-row { flex-direction: column; align-items: flex-start; }
+        .detail-label { min-width: auto; margin-bottom: 5px; }
+      }
+    </style>
+  </head>
+  <body>
+    <div class="email-container">
+      <div class="header">
+        <h1>🎉 Appointment Confirmed!</h1>
+        <p>Great news, <%= @guest.name %>! Your appointment has been accepted.</p>
+      </div>
+      
+      <div class="content">
+        <p>Hello <%= @guest.name %>,</p>
+        
+        <p>Excellent news! <strong><%= @nutritionist.name %></strong> has accepted your appointment request. We're excited to help you on your nutrition journey!</p>
+        
+        <div class="appointment-card">
+          <h3 style="margin: 0 0 15px 0; color: #4CAF50;">📅 Appointment Details</h3>
+          
+          <div class="detail-row">
+            <span class="detail-icon">👩‍⚕️</span>
+            <span class="detail-label">Nutritionist:</span>
+            <span class="detail-value"><%= @nutritionist.name %></span>
+          </div>
+          
+          <div class="detail-row">
+            <span class="detail-icon">🩺</span>
+            <span class="detail-label">Service:</span>
+            <span class="detail-value"><%= @service.name %></span>
+          </div>
+          
+          <div class="detail-row">
+            <span class="detail-icon">📅</span>
+            <span class="detail-label">Date & Time:</span>
+            <span class="detail-value"><%= @appointment.event_date.strftime("%A, %B %d, %Y at %I:%M %p") %></span>
+          </div>
+          
+          <div class="detail-row">
+            <span class="detail-icon">📍</span>
+            <span class="detail-label">Location:</span>
+            <span class="detail-value">
+              <%= @location.full_address %><br>
+              <small style="color: #666;"><%= @location.city %></small>
+            </span>
+          </div>
+          
+          <div class="detail-row">
+            <span class="detail-icon">💰</span>
+            <span class="detail-label">Investment:</span>
+            <span class="detail-value"><strong>€<%= sprintf('%.2f', @appointment.nutritionist_service.pricing) %></strong></span>
+          </div>
+        </div>
+        
+        <div class="tips">
+          <h4>📋 Preparing for Your Appointment</h4>
+          <ul>
+            <li>Please arrive <strong>10 minutes early</strong> to complete any necessary paperwork</li>
+            <li>Bring any relevant medical records, lab results, or current medications list</li>
+            <li>Prepare a 3-day food diary if possible</li>
+            <li>Write down any specific questions or concerns you'd like to discuss</li>
+            <li>Wear comfortable clothing if body measurements will be taken</li>
+          </ul>
+        </div>
+        
+        <div class="cta-section">
+          <p><strong>Need to make changes to your appointment?</strong></p>
+          <p style="margin: 15px 0; color: #666;">Contact your nutritionist directly if you need to reschedule or have any questions.</p>
+        </div>
+        
+        <p>We're looking forward to supporting you on your wellness journey. If you have any questions before your appointment, don't hesitate to reach out.</p>
+        
+        <p>Best regards,<br>
+        <strong>The Nutrium Team</strong></p>
+      </div>
+      
+      <div class="footer">
+        <p>This email was sent regarding your appointment request on <%= Date.current.strftime("%B %d, %Y") %></p>
+        <p style="color: #999; font-size: 12px;">Nutrium - Your Nutrition Partner</p>
+      </div>
+    </div>
+  </body>
+</html>
