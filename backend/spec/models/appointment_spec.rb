@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require 'rails_helper'
 
 RSpec.describe Appointment, type: :model do
@@ -21,7 +23,7 @@ RSpec.describe Appointment, type: :model do
       it 'is invalid when appointment is in the past' do
         appointment = build(:appointment, event_date: 1.day.ago)
         expect(appointment).not_to be_valid
-        expect(appointment.errors[:event_date]).to include("must be in the future")
+        expect(appointment.errors[:event_date]).to include('must be in the future')
       end
     end
   end

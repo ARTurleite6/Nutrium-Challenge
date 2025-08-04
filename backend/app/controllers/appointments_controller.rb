@@ -1,5 +1,7 @@
+# frozen_string_literal: true
+
 class AppointmentsController < ApplicationController
-  before_action :set_appointment, only: [ :accept, :refuse ]
+  before_action :set_appointment, only: %i[accept refuse]
 
   def create
     result = CreateAppointmentService.new(appointment_params).perform
@@ -7,7 +9,7 @@ class AppointmentsController < ApplicationController
       render json: result.appointment, serializer: AppointmentSerializer, status: :created
     else
       render json: {
-        errors: e.record&.errors&.full_messages
+        errors: result.errors
       }, status: :unprocessable_content
     end
   end
@@ -41,10 +43,9 @@ class AppointmentsController < ApplicationController
 
   def appointment_params
     params.require(:appointment).permit(
-      :guest_name,
-      :guest_email,
       :nutritionist_service_id,
-      :event_date
+      :event_date,
+      guest_attributes: %i[name email]
     )
   end
 end

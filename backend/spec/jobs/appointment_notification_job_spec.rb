@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require 'rails_helper'
 
 RSpec.describe AppointmentNotificationJob, type: :job do
@@ -20,14 +22,14 @@ RSpec.describe AppointmentNotificationJob, type: :job do
            state: :pending)
   end
 
-  describe "#perform" do
+  describe '#perform' do
     context 'when action is "accepted"' do
       before { appointment.update!(state: :accepted) }
 
       it 'sends appointment accepted email' do
-        expect {
+        expect do
           described_class.perform_now(appointment.id, 'accepted')
-        }.to change { ActionMailer::Base.deliveries.count }.by(1)
+        end.to change { ActionMailer::Base.deliveries.count }.by(1)
 
         email = ActionMailer::Base.deliveries.last
         expect(email.to).to include(guest.email)
@@ -35,13 +37,13 @@ RSpec.describe AppointmentNotificationJob, type: :job do
       end
     end
 
-   context 'when action is "rejected"' do
+    context 'when action is "rejected"' do
       before { appointment.update!(state: :rejected) }
 
       it 'sends appointment rejected email' do
-        expect {
+        expect do
           described_class.perform_now(appointment.id, 'rejected')
-        }.to change { ActionMailer::Base.deliveries.count }.by(1)
+        end.to change { ActionMailer::Base.deliveries.count }.by(1)
 
         email = ActionMailer::Base.deliveries.last
         expect(email.to).to include(guest.email)

@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class Location < ApplicationRecord
   has_many :nutritionist_services, dependent: :destroy
   has_many :nutritionists, through: :nutritionist_services

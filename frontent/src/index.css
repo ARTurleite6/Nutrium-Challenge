@@ -1,5 +1,18 @@
 @import "tailwindcss";
 
+@theme {
+    --color-navbar-start: #4bc387;
+    --color-navbar-end: #41af8c;
+    --color-search-start: #37b682;
+    --color-search-end: #3caa8c;
+    --color-button-orange: #e19669;
+    --color-button-orange-hover: #cb875f;
+    --color-button-orange-light: #f5e1dc;
+    --color-button-green-light: #dcf5eb;
+    --color-button-green-light-text: #77cab2;
+    --color-button-orange-light-text: #ebb79e;
+}
+
 :root {
     font-family: system-ui, Avenir, Helvetica, Arial, sans-serif;
     line-height: 1.5;
@@ -37,8 +50,6 @@ h1 {
 }
 
 button {
-    border-radius: 8px;
-    border: 1px solid transparent;
     padding: 0.6em 1.2em;
     font-size: 1em;
     font-weight: 500;

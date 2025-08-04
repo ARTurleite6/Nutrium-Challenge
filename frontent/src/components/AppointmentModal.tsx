@@ -1,12 +1,21 @@
 import { useState } from "react";
-import { Calendar, Clock, X, Mail, User } from "lucide-react";
+import Input from "./Input";
+import { Calendar, X, Mail, User } from "lucide-react";
 import type { NutritionistService, AppointmentForm } from "../types";
+import Button from "./Button";
 
 interface AppointmentModalProps {
   isOpen: boolean;
   onClose: () => void;
   selectedNutritionist: NutritionistService | null;
   apiBaseUrl: string;
+}
+
+interface FormErrors {
+  "guest.email"?: string[];
+  "guest.name"?: string[];
+  event_date?: string[];
+  general?: string[];
 }
 
 const AppointmentModal: React.FC<AppointmentModalProps> = ({
@@ -16,24 +25,24 @@ const AppointmentModal: React.FC<AppointmentModalProps> = ({
   apiBaseUrl,
 }) => {
   const [appointmentForm, setAppointmentForm] = useState<AppointmentForm>({
-    name: "",
-    email: "",
-    date: "",
-    time: "",
+    guest_attributes: {
+      name: "",
+      email: "",
+    },
+    event_date: "",
   });
 
-  const handleFormChange = (
-    field: keyof AppointmentForm,
-    value: string,
-  ): void => {
-    setAppointmentForm((prev) => ({
-      ...prev,
-      [field]: value,
-    }));
-  };
+  const [errors, setErrors] = useState<FormErrors>({});
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const [submitSuccess, setSubmitSuccess] = useState(false);
 
   const resetForm = (): void => {
-    setAppointmentForm({ name: "", email: "", date: "", time: "" });
+    setAppointmentForm({
+      guest_attributes: { name: "", email: "" },
+      event_date: "",
+    });
+    setErrors({});
+    setSubmitSuccess(false);
   };
 
   const handleClose = (): void => {
@@ -42,22 +51,19 @@ const AppointmentModal: React.FC<AppointmentModalProps> = ({
   };
 
   const submitAppointment = async (): Promise<void> => {
-    if (
-      !appointmentForm.name ||
-      !appointmentForm.email ||
-      !appointmentForm.date ||
-      !appointmentForm.time
-    ) {
-      alert("Please fill in all fields");
-      return;
-    }
+    setErrors((prev) => ({ ...prev, general: undefined }));
 
     if (!selectedNutritionist) {
-      alert("No nutritionist selected");
+      setErrors({ general: ["No nutritionist selected"] });
       return;
     }
 
+    setIsSubmitting(true);
+
     try {
+      // TODO: change this to also include time
+      const eventDateTime = appointmentForm.event_date;
+
       const response = await fetch(`${apiBaseUrl}/appointments`, {
         method: "POST",
         headers: {
@@ -65,26 +71,38 @@ const AppointmentModal: React.FC<AppointmentModalProps> = ({
         },
         body: JSON.stringify({
           appointment: {
-            guest_attributes: {
-              name: appointmentForm.name,
-              email: appointmentForm.email,
-            },
+            ...appointmentForm,
             nutritionist_service_id: selectedNutritionist.id,
-            event_date: `${appointmentForm.date}T${appointmentForm.time}:00`,
+            event_date: eventDateTime,
           },
         }),
       });
 
       if (response.ok) {
-        alert("Appointment request submitted successfully!");
-        handleClose();
+        setSubmitSuccess(true);
+        setTimeout(() => {
+          handleClose();
+        }, 2000);
       } else {
         const errorData = await response.json();
-        throw new Error(errorData.message || "Failed to submit appointment");
+
+        if (errorData.errors) {
+          const serverErrors: FormErrors = errorData.errors;
+          setErrors(serverErrors);
+        } else {
+          setErrors({
+            general:
+              errorData.message || "Failed to submit appointment request",
+          });
+        }
       }
     } catch (error) {
       console.error("Error submitting appointment:", error);
-      alert("Error submitting appointment. Please try again.");
+      setErrors({
+        general: ["Network error. Please check your connection and try again."],
+      });
+    } finally {
+      setIsSubmitting(false);
     }
   };
 
@@ -101,10 +119,28 @@ const AppointmentModal: React.FC<AppointmentModalProps> = ({
             <button
               onClick={handleClose}
               className="text-gray-400 hover:text-gray-600 p-1 transition-colors"
+              disabled={isSubmitting}
             >
               <X className="w-6 h-6" />
             </button>
           </div>
+
+          {submitSuccess && (
+            <div className="mb-6 p-4 bg-green-50 border border-green-200 rounded-lg">
+              <p className="text-green-800 font-medium">
+                ✅ Appointment request submitted successfully!
+              </p>
+              <p className="text-green-700 text-sm mt-1">
+                You will receive a confirmation email shortly.
+              </p>
+            </div>
+          )}
+
+          {errors.general && (
+            <div className="mb-6 p-4 bg-red-50 border border-red-200 rounded-lg">
+              <p className="text-red-800">{errors.general}</p>
+            </div>
+          )}
 
           {selectedNutritionist && (
             <div className="mb-8 p-6 bg-gray-50 rounded-xl">
@@ -124,82 +160,90 @@ const AppointmentModal: React.FC<AppointmentModalProps> = ({
           )}
 
           <div className="space-y-6">
-            <div>
-              <label className="block text-sm font-semibold text-gray-700 mb-2">
-                Full Name
-              </label>
-              <div className="relative">
-                <User className="absolute left-4 top-1/2 transform -translate-y-1/2 w-5 h-5 text-gray-400" />
-                <input
-                  type="text"
-                  value={appointmentForm.name}
-                  onChange={(e) => handleFormChange("name", e.target.value)}
-                  className="w-full pl-12 pr-4 py-3 text-base border-2 border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-green-500 focus:border-green-500 transition-colors"
-                  placeholder="Your full name"
-                />
-              </div>
-            </div>
+            <Input
+              label="Full Name"
+              type="text"
+              value={appointmentForm.guest_attributes.name}
+              onChange={(e) => {
+                setAppointmentForm((prev) => ({
+                  ...prev,
+                  guest_attributes: {
+                    ...prev.guest_attributes,
+                    name: e.target.value,
+                  },
+                }));
+                setErrors((prev) => ({
+                  ...prev,
+                  "guest.name": undefined,
+                }));
+              }}
+              placeholder="Your full name"
+              icon={<User className="w-5 h-5 text-gray-400" />}
+              iconPosition="left"
+              errors={errors["guest.name"]}
+              disabled={isSubmitting}
+            />
 
-            <div>
-              <label className="block text-sm font-semibold text-gray-700 mb-2">
-                Email Address
-              </label>
-              <div className="relative">
-                <Mail className="absolute left-4 top-1/2 transform -translate-y-1/2 w-5 h-5 text-gray-400" />
-                <input
-                  type="email"
-                  value={appointmentForm.email}
-                  onChange={(e) => handleFormChange("email", e.target.value)}
-                  className="w-full pl-12 pr-4 py-3 text-base border-2 border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-green-500 focus:border-green-500 transition-colors"
-                  placeholder="your.email@example.com"
-                />
-              </div>
-            </div>
+            <Input
+              label="Email Address"
+              type="email"
+              value={appointmentForm.guest_attributes.email}
+              onChange={(e) => {
+                setAppointmentForm((prev) => ({
+                  ...prev,
+                  guest_attributes: {
+                    ...prev.guest_attributes,
+                    email: e.target.value,
+                  },
+                }));
+                setErrors((prev) => ({
+                  ...prev,
+                  "guest.email": undefined,
+                }));
+              }}
+              placeholder="your.email@example.com"
+              icon={<Mail className="w-5 h-5 text-gray-400" />}
+              iconPosition="left"
+              errors={errors["guest.email"]}
+              disabled={isSubmitting}
+            />
 
-            <div>
-              <label className="block text-sm font-semibold text-gray-700 mb-2">
-                Preferred Date
-              </label>
-              <div className="relative">
-                <Calendar className="absolute left-4 top-1/2 transform -translate-y-1/2 w-5 h-5 text-gray-400" />
-                <input
-                  type="date"
-                  value={appointmentForm.date}
-                  onChange={(e) => handleFormChange("date", e.target.value)}
-                  min={new Date().toISOString().split("T")[0]}
-                  className="w-full pl-12 pr-4 py-3 text-base border-2 border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-green-500 focus:border-green-500 transition-colors"
-                />
-              </div>
-            </div>
-
-            <div>
-              <label className="block text-sm font-semibold text-gray-700 mb-2">
-                Preferred Time
-              </label>
-              <div className="relative">
-                <Clock className="absolute left-4 top-1/2 transform -translate-y-1/2 w-5 h-5 text-gray-400" />
-                <input
-                  type="time"
-                  value={appointmentForm.time}
-                  onChange={(e) => handleFormChange("time", e.target.value)}
-                  className="w-full pl-12 pr-4 py-3 text-base border-2 border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-green-500 focus:border-green-500 transition-colors"
-                />
-              </div>
-            </div>
+            <Input
+              label="Preferred Date"
+              type="date"
+              value={appointmentForm.event_date}
+              onChange={(e) => {
+                setAppointmentForm((prev) => ({
+                  ...prev,
+                  event_date: e.target.value,
+                }));
+                setErrors((prev) => ({
+                  ...prev,
+                  event_date: undefined,
+                }));
+              }}
+              min={new Date().toISOString().split("T")[0]}
+              icon={<Calendar className="w-5 h-5 text-gray-400" />}
+              iconPosition="left"
+              errors={errors.event_date}
+              disabled={isSubmitting}
+            />
 
             <div className="flex space-x-4 pt-6">
-              <button
+              <Button
                 onClick={handleClose}
-                className="flex-1 px-6 py-3 border-2 border-gray-300 text-gray-700 rounded-lg hover:bg-gray-50 transition-colors font-medium text-base"
+                variant="orange"
+                disabled={isSubmitting}
               >
                 Cancel
-              </button>
-              <button
+              </Button>
+              <Button
                 onClick={submitAppointment}
-                className="flex-1 px-6 py-3 bg-green-500 text-white rounded-lg hover:bg-green-600 transition-colors font-medium text-base"
+                variant="green"
+                disabled={isSubmitting}
               >
-                Request Appointment
-              </button>
+                {isSubmitting ? "Submitting..." : "Request Appointment"}
+              </Button>
             </div>
           </div>
         </div>

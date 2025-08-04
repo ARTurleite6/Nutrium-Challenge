@@ -147,6 +147,11 @@ GEM
       logger (~> 1.6)
     letter_opener (1.10.0)
       launchy (>= 2.2, < 4)
+    letter_opener_web (3.0.0)
+      actionmailer (>= 6.1)
+      letter_opener (~> 1.9)
+      railties (>= 6.1)
+      rexml
     lint_roller (1.1.0)
     logger (1.7.0)
     loofah (2.24.1)
@@ -256,6 +261,7 @@ GEM
     regexp_parser (2.10.0)
     reline (0.6.2)
       io-console (~> 0.5)
+    rexml (3.4.1)
     rspec-core (3.13.5)
       rspec-support (~> 3.13.0)
     rspec-expectations (3.13.5)
@@ -369,6 +375,7 @@ DEPENDENCIES
   faker (~> 3.5)
   kamal
   letter_opener (~> 1.10)
+  letter_opener_web (~> 3.0)
   pg (~> 1.1)
   puma (>= 5.0)
   rack-cors

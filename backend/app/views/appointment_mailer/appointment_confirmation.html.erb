@@ -1,0 +1,227 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <style>
+      body {
+        font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+        line-height: 1.6;
+        color: #333;
+        max-width: 600px;
+        margin: 0 auto;
+        padding: 20px;
+        background-color: #f8f9fa;
+      }
+      .email-container {
+        background-color: white;
+        border-radius: 8px;
+        overflow: hidden;
+        box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+      }
+      .header {
+        background: linear-gradient(135deg, #3b82f6 0%, #2563eb 100%);
+        color: white;
+        padding: 30px 20px;
+        text-align: center;
+      }
+      .header h1 {
+        margin: 0;
+        font-size: 24px;
+        font-weight: 600;
+      }
+      .header p {
+        margin: 10px 0 0 0;
+        opacity: 0.9;
+        font-size: 16px;
+      }
+      .content {
+        padding: 30px 20px;
+      }
+      .appointment-card {
+        background-color: #f0f9ff;
+        border: 1px solid #e0f2fe;
+        border-left: 4px solid #3b82f6;
+        border-radius: 6px;
+        padding: 20px;
+        margin: 20px 0;
+      }
+      .detail-row {
+        display: flex;
+        margin: 12px 0;
+        align-items: center;
+      }
+      .detail-icon {
+        width: 20px;
+        margin-right: 12px;
+        font-size: 16px;
+      }
+      .detail-label {
+        font-weight: 600;
+        color: #555;
+        min-width: 100px;
+      }
+      .detail-value {
+        color: #333;
+        flex: 1;
+      }
+      .what-to-bring {
+        background-color: #f0fdf4;
+        border: 1px solid #dcfce7;
+        border-radius: 6px;
+        padding: 15px;
+        margin: 20px 0;
+      }
+      .what-to-bring h4 {
+        margin: 0 0 10px 0;
+        color: #166534;
+      }
+      .what-to-bring ul {
+        margin: 0;
+        padding-left: 20px;
+      }
+      .what-to-bring li {
+        margin: 5px 0;
+        color: #166534;
+      }
+      .calendar-section {
+        text-align: center;
+        margin: 30px 0;
+        padding: 20px;
+        background-color: #f8f9fa;
+        border-radius: 6px;
+      }
+      .btn {
+        display: inline-block;
+        padding: 12px 24px;
+        background-color: #3b82f6;
+        color: white;
+        text-decoration: none;
+        border-radius: 6px;
+        font-weight: 600;
+        margin: 0 10px;
+      }
+      .btn-secondary {
+        background-color: #6c757d;
+      }
+      .footer {
+        text-align: center;
+        padding: 20px;
+        color: #666;
+        font-size: 14px;
+        border-top: 1px solid #eee;
+      }
+      .qr-code {
+        text-align: center;
+        margin: 20px 0;
+      }
+      .qr-code img {
+        max-width: 150px;
+        border: 1px solid #ddd;
+        padding: 10px;
+      }
+      @media only screen and (max-width: 600px) {
+        body { padding: 10px; }
+        .content { padding: 20px 15px; }
+        .detail-row { flex-direction: column; align-items: flex-start; }
+        .detail-label { min-width: auto; margin-bottom: 5px; }
+      }
+    </style>
+  </head>
+  <body>
+    <div class="email-container">
+      <div class="header">
+        <h1>🔔 Appointment Confirmation</h1>
+        <p>Your upcoming appointment with <%= @nutritionist.name %></p>
+      </div>
+
+      <div class="content">
+        <p>Hello <%= @guest.name %>,</p>
+
+        <p>This is a friendly reminder about your upcoming appointment with <strong><%= @nutritionist.name %></strong>. We're looking forward to meeting you!</p>
+
+        <div class="appointment-card">
+          <h3 style="margin: 0 0 15px 0; color: #2563eb;">📅 Appointment Details</h3>
+
+          <div class="detail-row">
+            <span class="detail-icon">👩‍⚕️</span>
+            <span class="detail-label">Nutritionist:</span>
+            <span class="detail-value"><%= @nutritionist.name %></span>
+          </div>
+
+          <div class="detail-row">
+            <span class="detail-icon">🩺</span>
+            <span class="detail-label">Service:</span>
+            <span class="detail-value"><%= @service.name %></span>
+          </div>
+
+          <div class="detail-row">
+            <span class="detail-icon">📅</span>
+            <span class="detail-label">Date & Time:</span>
+            <span class="detail-value"><%= @appointment.event_date.strftime("%A, %B %d, %Y at %I:%M %p") %></span>
+          </div>
+
+          <div class="detail-row">
+            <span class="detail-icon">⏱️</span>
+            <span class="detail-label">Duration:</span>
+            <span class="detail-value">60 minutes</span>
+          </div>
+
+          <div class="detail-row">
+            <span class="detail-icon">📍</span>
+            <span class="detail-label">Location:</span>
+            <span class="detail-value">
+              <%= @location.full_address %><br>
+              <small style="color: #666;"><%= @location.city %></small>
+            </span>
+          </div>
+
+          <div class="detail-row">
+            <span class="detail-icon">💰</span>
+            <span class="detail-label">Investment:</span>
+            <span class="detail-value"><strong>€<%= sprintf('%.2f', @appointment.nutritionist_service.pricing) %></strong></span>
+          </div>
+        </div>
+
+        <div class="what-to-bring">
+          <h4>🧳 What to Bring</h4>
+          <ul>
+            <li>Any recent medical reports or test results related to your nutrition needs</li>
+            <li>A list of medications and supplements you're currently taking</li>
+            <li>Your food journal (if you've been keeping one)</li>
+            <li>Any questions you have about your nutrition goals</li>
+            <li>A form of payment (credit card, cash, or insurance information)</li>
+          </ul>
+        </div>
+
+        <p><strong>Need to cancel or reschedule?</strong><br>
+        If you need to change your appointment, please contact us at least 24 hours in advance to avoid any cancellation fees.</p>
+
+        <div class="calendar-section">
+          <p><strong>Add to your calendar to make sure you don't forget!</strong></p>
+          <p style="margin-bottom: 20px;">Click one of the buttons below to add this appointment to your calendar:</p>
+          <a href="#" class="btn">Google Calendar</a>
+          <a href="#" class="btn btn-secondary">iCal/Outlook</a>
+        </div>
+
+        <div class="qr-code">
+          <p><strong>For quick check-in</strong></p>
+          <p>Show this QR code when you arrive:</p>
+          <img src="https://api.qrserver.com/v1/create-qr-code/?size=150x150&data=AppointmentID:<%= @appointment.id %>" alt="Appointment QR Code">
+        </div>
+
+        <p>If you have any questions before your appointment, feel free to contact us. We're here to help make your experience as smooth as possible.</p>
+
+        <p>We look forward to seeing you soon!</p>
+
+        <p>Best regards,<br>
+        <strong>The Nutrium Team</strong></p>
+      </div>
+
+      <div class="footer">
+        <p>This email was sent on <%= Date.current.strftime("%B %d, %Y") %></p>
+        <p style="color: #999; font-size: 12px;">Nutrium - Your Nutrition Partner</p>
+      </div>
+    </div>
+  </body>
+</html>

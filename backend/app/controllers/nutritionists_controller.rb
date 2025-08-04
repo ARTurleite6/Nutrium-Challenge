@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class NutritionistsController < ApplicationController
   before_action :set_nutritionist
 

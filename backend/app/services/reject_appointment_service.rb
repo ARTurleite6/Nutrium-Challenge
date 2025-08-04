@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class RejectAppointmentService
   Result = Struct.new(:success?, :appointment, :errors, keyword_init: true)
 
@@ -7,7 +9,7 @@ class RejectAppointmentService
 
   def perform
     appointment.update!(state: :rejected)
-    AppointmentNotificationJob.perform_later(appointment.id, "rejected")
+    AppointmentNotificationJob.perform_later(appointment.id, 'rejected')
     Result.new({ success?: true, appointment: })
   rescue ActiveRecord::RecordNotFound => e
     Result.new({ success?: false, errors: e.record&.errors&.full_messages })

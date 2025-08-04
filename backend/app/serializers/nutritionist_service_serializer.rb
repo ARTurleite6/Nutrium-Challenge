@@ -1,5 +1,7 @@
+# frozen_string_literal: true
+
 class NutritionistServiceSerializer < ActiveModel::Serializer
-  attributes :id, :pricing
+  attributes :id, :pricing, :delivery_method
 
   belongs_to :nutritionist, serializer: NutritionistSerializer
   belongs_to :service, serializer: ServiceSerializer

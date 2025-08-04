@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require 'rails_helper'
 
 RSpec.describe AcceptAppointmentService do
@@ -36,15 +38,15 @@ RSpec.describe AcceptAppointmentService do
       end
 
       it 'updates appointment state to accepted' do
-        expect {
+        expect do
           service_instance.perform
-        }.to change { appointment.reload.state }.from('pending').to('accepted')
+        end.to change { appointment.reload.state }.from('pending').to('accepted')
       end
 
       it 'enqueues notification job' do
-        expect {
+        expect do
           service_instance.perform
-        }.to have_enqueued_job(AppointmentNotificationJob)
+        end.to have_enqueued_job(AppointmentNotificationJob)
           .with(appointment.id, 'accepted')
           .on_queue('email_notifications')
       end

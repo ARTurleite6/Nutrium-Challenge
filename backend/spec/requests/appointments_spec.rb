@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require 'rails_helper'
 
 RSpec.describe 'Appointments', type: :request do
@@ -19,9 +21,9 @@ RSpec.describe 'Appointments', type: :request do
     context 'with valid parameters' do
       it 'creates a new appointment' do
         aggregate_failures do
-          expect {
+          expect do
             post appointments_path, params: valid_params, as: :json
-          }.to change(Appointment, :count).by(1)
+          end.to change(Appointment, :count).by(1)
           expect(response).to have_http_status(:created)
           expect(json).to include(
             'id',
@@ -33,9 +35,9 @@ RSpec.describe 'Appointments', type: :request do
       end
 
       it 'creates a new guest when guest does not exist' do
-        expect {
+        expect do
           post appointments_path, params: valid_params, as: :json
-        }.to change(Guest, :count).by(1)
+        end.to change(Guest, :count).by(1)
 
         created_guest = Guest.last
         expect(created_guest.name).to eq('João Silva')
@@ -47,9 +49,9 @@ RSpec.describe 'Appointments', type: :request do
       let!(:existing_guest) { create(:guest, name: 'João Silva', email: 'joao@example.com') }
 
       it 'uses the existing guest' do
-        expect {
+        expect do
           post appointments_path, params: valid_params, as: :json
-        }.not_to change(Guest, :count)
+        end.not_to change(Guest, :count)
 
         appointment = Appointment.last
         expect(appointment.guest).to eq(existing_guest)
@@ -78,9 +80,9 @@ RSpec.describe 'Appointments', type: :request do
       end
 
       it 'creates appointment with the existing guest' do
-        expect {
+        expect do
           post appointments_path, params: params_with_different_name, as: :json
-        }.not_to change(Guest, :count)
+        end.not_to change(Guest, :count)
 
         appointment = Appointment.last
         expect(appointment.guest).to eq(existing_guest)
@@ -111,9 +113,9 @@ RSpec.describe 'Appointments', type: :request do
       end
 
       it 'does not create an appointment' do
-        expect {
+        expect do
           post appointments_path, params: invalid_params, as: :json
-        }.not_to change(Appointment, :count)
+        end.not_to change(Appointment, :count)
       end
     end
 
