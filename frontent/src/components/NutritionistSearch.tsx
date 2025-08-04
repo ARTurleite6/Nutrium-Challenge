@@ -1,9 +1,9 @@
 import { useState, useEffect, useCallback } from "react";
-import type { NutritionistService, ApiResponse } from "../types";
+import type { NutritionistService } from "../types";
 import NutritionistCard from "./NutritionistCard";
-import Navbar from "./Navbar";
 import Search from "./Search";
 import AppointmentModal from "./AppointmentModal";
+import { getNutritionistServices } from "../api/nutritionist_services";
 
 type SearchParams = {
   searchTerm: string;
@@ -19,8 +19,6 @@ const NutritionistSearch: React.FC = () => {
   const [selectedNutritionist, setSelectedNutritionist] =
     useState<NutritionistService | null>(null);
 
-  const API_BASE_URL = "http://localhost:3000";
-
   const getSortedServices = useCallback((services: NutritionistService[]) => {
     return services.sort((a, b) =>
       a.nutritionist.name.localeCompare(b.nutritionist.name),
@@ -31,28 +29,12 @@ const NutritionistSearch: React.FC = () => {
     async (params?: SearchParams): Promise<void> => {
       setLoading(true);
       try {
-        let url = `${API_BASE_URL}/nutritionist_services`;
-        const queryParams: string[] = [];
+        const response = await getNutritionistServices(
+          params?.searchTerm,
+          params?.location,
+        );
 
-        if (params?.searchTerm) {
-          queryParams.push(`search=${encodeURIComponent(params.searchTerm)}`);
-        }
-
-        if (params?.location) {
-          queryParams.push(`location=${encodeURIComponent(params.location)}`);
-        }
-
-        if (queryParams.length > 0) {
-          url += `?${queryParams.join("&")}`;
-        }
-
-        const response = await fetch(url);
-        if (!response.ok) {
-          throw new Error(`HTTP error! status: ${response.status}`);
-        }
-
-        const data: ApiResponse = await response.json();
-        setNutritionistServices(getSortedServices(data || []));
+        setNutritionistServices(getSortedServices(response || []));
       } catch (error) {
         console.error("Error fetching nutritionists:", error);
         setNutritionistServices([]);
@@ -92,8 +74,6 @@ const NutritionistSearch: React.FC = () => {
     <div className="min-h-screen bg-gray-50 w-full">
       {/* Header */}
       <div className="w-full">
-        <Navbar />
-
         {/* Search Section */}
         <div className="w-full">
           <Search onSearch={fetchNutritionists} />
@@ -139,7 +119,6 @@ const NutritionistSearch: React.FC = () => {
         isOpen={showModal}
         onClose={closeModal}
         selectedNutritionist={selectedNutritionist}
-        apiBaseUrl={API_BASE_URL}
       />
     </div>
   );

@@ -86,6 +86,23 @@ RSpec.describe CreateAppointmentService do
       end
     end
 
+    context 'when guest already has an appointment' do
+      let(:existing_guest) { create(:guest, name: 'John Doe', email: 'john@example.com') }
+      let!(:existing_appointment) { create(:appointment, guest: existing_guest) }
+      let(:create_appointment) { service_instance.perform }
+
+      it 'creates a new appointment and rejects all pending appointments' do
+        aggregate_failures do
+          expect do
+            create_appointment
+          end.to change { Appointment.count }.by(1)
+
+          expect(create_appointment.success?).to be(true)
+          expect(existing_appointment.state).to eq('rejected')
+        end
+      end
+    end
+
     context 'with invalid nutritionist_service_id' do
       let(:invalid_params) do
         valid_params.merge(nutritionist_service_id: 'non-existent-id')

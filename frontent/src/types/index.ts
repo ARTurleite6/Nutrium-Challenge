@@ -4,6 +4,17 @@ export interface Nutritionist {
   title: string;
 }
 
+export interface Appointment {
+  id: string;
+  guest: Guest;
+  event_date: string;
+  nutritionist_service: NutritionistService;
+}
+
+export interface Guest {
+  name: string;
+}
+
 export interface Service {
   id: string;
   name: string;
@@ -26,7 +37,14 @@ export interface NutritionistService {
 
 export type DeliveryMethod = "in_person" | "online";
 
-export type ApiResponse = NutritionistService[];
+export interface AppointmentRequest {
+  guest_attributes: {
+    name: string;
+    email: string;
+  };
+  nutritionist_service_id: string;
+  event_date: string;
+}
 
 export interface AppointmentForm {
   guest_attributes: {

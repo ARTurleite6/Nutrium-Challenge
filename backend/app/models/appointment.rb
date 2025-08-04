@@ -10,7 +10,6 @@ class Appointment < ApplicationRecord
 
   validates :event_date, presence: true
   validate :future_appointment
-  validate :one_pending_per_guest, on: :create
 
   scope :for_nutritionist, lambda { |nutritionist_id|
     joins(:nutritionist_service).where(nutritionist_service: { nutritionist_id: nutritionist_id })
@@ -22,13 +21,6 @@ class Appointment < ApplicationRecord
 
   def future_appointment
     errors.add(:event_date, 'must be in the future') if event_date&.past?
-  end
-
-  # TODO: check if this makes sense in the future(should be this or an error)
-  def one_pending_per_guest
-    return unless guest&.appointments&.pending&.exists?
-
-    guest.appointments.pending.update_all(state: :rejected)
   end
 
   def reject_conflicting_appointments
