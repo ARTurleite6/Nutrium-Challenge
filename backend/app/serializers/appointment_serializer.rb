@@ -1,5 +1,7 @@
+# frozen_string_literal: true
+
 class AppointmentSerializer < ActiveModel::Serializer
-  attributes :id,  :state, :event_date, :created_at
+  attributes :id, :state, :event_date, :created_at
 
   belongs_to :guest, serializer: GuestSerializer
   belongs_to :nutritionist_service, serializer: NutritionistServiceSerializer

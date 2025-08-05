@@ -1,6 +1,10 @@
+# frozen_string_literal: true
+
 class Appointment < ApplicationRecord
   belongs_to :guest
   belongs_to :nutritionist_service
+
+  accepts_nested_attributes_for :guest
 
   enum :state, { pending: 0, accepted: 1, rejected: 2 }
 
@@ -8,7 +12,7 @@ class Appointment < ApplicationRecord
   validate :future_appointment
   validate :one_pending_per_guest, on: :create
 
-  scope :for_nutritionist, ->(nutritionist_id) {
+  scope :for_nutritionist, lambda { |nutritionist_id|
     joins(:nutritionist_service).where(nutritionist_service: { nutritionist_id: nutritionist_id })
   }
 
@@ -17,22 +21,22 @@ class Appointment < ApplicationRecord
   private
 
   def future_appointment
-    errors.add(:event_date, "must be in the future") if event_date&.past?
+    errors.add(:event_date, 'must be in the future') if event_date&.past?
   end
 
   # TODO: check if this makes sense in the future(should be this or an error)
   def one_pending_per_guest
-    if guest.appointments.pending.exists?
-      guest.appointments.pending.update_all(state: :rejected)
-    end
+    return unless guest&.appointments&.pending&.exists?
+
+    guest.appointments.pending.update_all(state: :rejected)
   end
 
   def reject_conflicting_appointments
     nutritionist_service.appointments
-      .where(event_date: event_date)
-      .where.not(id: id)
-      .pending
-      .update_all(state: :rejected)
+                        .where(event_date: event_date)
+                        .where.not(id: id)
+                        .pending
+                        .update_all(state: :rejected)
   end
 
   def saved_change_to_state_and_accepted?

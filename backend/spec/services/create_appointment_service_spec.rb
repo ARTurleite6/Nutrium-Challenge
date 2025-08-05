@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require 'rails_helper'
 
 RSpec.describe CreateAppointmentService do
@@ -16,8 +18,10 @@ RSpec.describe CreateAppointmentService do
 
   let(:valid_params) do
     {
-      guest_name: 'John Doe',
-      guest_email: 'john@example.com',
+      guest_attributes: {
+        name: 'John Doe',
+        email: 'john@example.com'
+      },
       nutritionist_service_id: nutritionist_service.id,
       event_date: future_date
     }
@@ -36,9 +40,9 @@ RSpec.describe CreateAppointmentService do
       end
 
       it 'creates a new appointment' do
-        expect {
+        expect do
           service_instance.perform
-        }.to change { Appointment.count }.by(1)
+        end.to change { Appointment.count }.by(1)
       end
 
       it 'creates appointment with correct attributes' do
@@ -51,9 +55,9 @@ RSpec.describe CreateAppointmentService do
       end
 
       it 'creates a new guest when guest does not exist' do
-        expect {
+        expect do
           service_instance.perform
-        }.to change { Guest.count }.by(1)
+        end.to change { Guest.count }.by(1)
       end
 
       it 'creates guest with correct attributes' do
@@ -65,32 +69,20 @@ RSpec.describe CreateAppointmentService do
       end
     end
 
-    context 'when guest already exists' do
+    context 'when guest email already exists' do
       let!(:existing_guest) { create(:guest, name: 'Jane Smith', email: 'john@example.com') }
 
       it 'does not create a new guest' do
-        expect {
+        expect do
           service_instance.perform
-        }.not_to change { Guest.count }
+        end.not_to(change { Guest.count })
       end
 
-      it 'uses the existing guest' do
+      it 'returns an error' do
         result = service_instance.perform
 
-        expect(result.appointment.guest).to eq(existing_guest)
-      end
-
-      it 'updates guest name if different' do
-        service_instance.perform
-
-        expect(existing_guest.reload.name).to eq('John Doe')
-      end
-
-      it 'does not update guest name if same' do
-        existing_guest.update!(name: 'John Doe')
-
-        expect(existing_guest).not_to receive(:update!)
-        service_instance.perform
+        expect(result.success?).to be(false)
+        expect(result.errors.full_messages).to include('Guest email has already been taken')
       end
     end
 
@@ -101,9 +93,9 @@ RSpec.describe CreateAppointmentService do
       let(:service_with_invalid_params) { described_class.new(invalid_params) }
 
       it 'raises ActiveRecord::RecordNotFound' do
-        expect {
+        expect do
           service_with_invalid_params.perform
-        }.not_to change { Appointment.count }
+        end.not_to(change { Appointment.count })
       end
     end
 
@@ -115,28 +107,28 @@ RSpec.describe CreateAppointmentService do
 
       it 'returns the error messages' do
         aggregate_failures do
-          expect {
+          expect do
             result
-          }.not_to change { Appointment.count }
+          end.not_to(change { Appointment.count })
           expect(result.success?).to be(false)
-          expect(result.errors).to include('Event date must be in the future')
+          expect(result.errors.full_messages).to include('Event date must be in the future')
         end
       end
     end
 
     context 'with invalid guest parameters' do
       let(:invalid_params) do
-        valid_params.merge(guest_email: 'invalid-email')
+        valid_params.merge(guest_attributes: { email: 'invalid-email' })
       end
       let(:result) { described_class.new(invalid_params).perform }
 
       it 'returns the error messages' do
         aggregate_failures do
-          expect {
+          expect do
             result
-          }.not_to change { Appointment.count }
+          end.not_to(change { Appointment.count })
           expect(result.success?).to be(false)
-          expect(result.errors).to include('Email is invalid')
+          expect(result.errors.full_messages).to include("Guest name can't be blank", 'Guest email is invalid')
         end
       end
     end

@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class CreateAppointments < ActiveRecord::Migration[8.0]
   def change
     create_table :appointments, id: :uuid do |t|
@@ -9,7 +11,7 @@ class CreateAppointments < ActiveRecord::Migration[8.0]
       t.timestamps
     end
 
-    add_index :appointments, :guest_id, where: "state = 0", unique: true, name: "idx_one_pending_per_guest"
+    add_index :appointments, :guest_id, where: 'state = 0', unique: true, name: 'idx_one_pending_per_guest'
     add_index :appointments, :state
     add_index :appointments, :event_date
   end
