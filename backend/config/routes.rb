@@ -14,7 +14,7 @@ Rails.application.routes.draw do
 
   resources :appointments, only: :create do
     patch :accept
-    patch :refuse
+    patch :reject
   end
 
   resources :nutritionists, only: [] do

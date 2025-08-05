@@ -17,7 +17,6 @@ const PendingAppointmentModal: React.FC<PendingAppointmentModalProps> = ({
   onAccept,
   onDecline,
 }) => {
-  // If there's no appointment, show a placeholder message
   if (!appointment) {
     return (
       <Modal isOpen={isOpen} onClose={onClose} title="Pending Request">
@@ -28,7 +27,6 @@ const PendingAppointmentModal: React.FC<PendingAppointmentModalProps> = ({
     );
   }
 
-  // Format date for display
   const formattedDate = new Date(appointment.event_date).toLocaleDateString();
 
   return (

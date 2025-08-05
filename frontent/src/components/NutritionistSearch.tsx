@@ -1,9 +1,11 @@
 import { useState, useEffect, useCallback } from "react";
 import type { NutritionistService } from "../types";
+
 import NutritionistCard from "./NutritionistCard";
 import Search from "./Search";
 import AppointmentModal from "./AppointmentModal";
 import { getNutritionistServices } from "../api/nutritionist_services";
+import Pagination from "./Pagination";
 
 type SearchParams = {
   searchTerm: string;
@@ -18,6 +20,12 @@ const NutritionistSearch: React.FC = () => {
   const [showModal, setShowModal] = useState<boolean>(false);
   const [selectedNutritionist, setSelectedNutritionist] =
     useState<NutritionistService | null>(null);
+  const [currentPage, setCurrentPage] = useState<number>(1);
+  const [totalPages, setTotalPages] = useState<number>(1);
+  const [perPage] = useState<number>(10);
+  const [searchParams, setSearchParams] = useState<SearchParams | undefined>(
+    undefined,
+  );
 
   const getSortedServices = useCallback((services: NutritionistService[]) => {
     return services.sort((a, b) =>
@@ -28,13 +36,25 @@ const NutritionistSearch: React.FC = () => {
   const fetchNutritionists = useCallback(
     async (params?: SearchParams): Promise<void> => {
       setLoading(true);
+      if (params) {
+        setSearchParams(params);
+        setCurrentPage(1);
+      }
+
       try {
+        const currentParams = params || searchParams;
         const response = await getNutritionistServices(
-          params?.searchTerm,
-          params?.location,
+          currentParams?.searchTerm,
+          currentParams?.location,
+          params ? 1 : currentPage,
+          perPage,
         );
 
-        setNutritionistServices(getSortedServices(response || []));
+        setNutritionistServices(
+          getSortedServices(response.nutritionist_services || []),
+        );
+        setTotalPages(response.pagination.total_pages);
+        setCurrentPage(response.pagination.current_page);
       } catch (error) {
         console.error("Error fetching nutritionists:", error);
         setNutritionistServices([]);
@@ -42,12 +62,12 @@ const NutritionistSearch: React.FC = () => {
         setLoading(false);
       }
     },
-    [getSortedServices],
+    [getSortedServices, currentPage, perPage, searchParams],
   );
 
   useEffect(() => {
     fetchNutritionists();
-  }, [fetchNutritionists]);
+  }, [currentPage, fetchNutritionists]);
 
   const openAppointmentModal = (
     nutritionistService: NutritionistService,
@@ -61,7 +81,13 @@ const NutritionistSearch: React.FC = () => {
     setSelectedNutritionist(null);
   };
 
-  // Group services by nutritionist
+  const handlePageChange = (page: number): void => {
+    if (page !== currentPage) {
+      window.scrollTo(0, 0);
+      setCurrentPage(page);
+    }
+  };
+
   const groupedServices: { [key: string]: NutritionistService[] } = {};
   nutritionistServices.forEach((service) => {
     if (!groupedServices[service.nutritionist.id]) {
@@ -72,15 +98,12 @@ const NutritionistSearch: React.FC = () => {
 
   return (
     <div className="min-h-screen bg-gray-50 w-full">
-      {/* Header */}
       <div className="w-full">
-        {/* Search Section */}
         <div className="w-full">
           <Search onSearch={fetchNutritionists} />
         </div>
       </div>
 
-      {/* Results */}
       <div className="w-full px-4 sm:px-6 lg:px-8 py-12">
         {loading ? (
           <div className="text-center py-16">
@@ -112,9 +135,17 @@ const NutritionistSearch: React.FC = () => {
             </p>
           </div>
         )}
+
+        {totalPages > 1 && !loading && (
+          <Pagination
+            currentPage={currentPage}
+            totalPages={totalPages}
+            onPageChange={handlePageChange}
+            disabled={loading}
+          />
+        )}
       </div>
 
-      {/* Appointment Modal */}
       <AppointmentModal
         isOpen={showModal}
         onClose={closeModal}

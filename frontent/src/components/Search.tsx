@@ -31,7 +31,6 @@ const Search: React.FC<Props> = ({ onSearch }) => {
 
   return (
     <div className="flex flex-col sm:flex-row gap-3 w-full mx-auto bg-gradient-to-br from-search-start to-search-end px-4 sm:px-6 lg:px-16 py-12">
-      {/* Search Input */}
       <div className="flex-1">
         <Input
           type="text"
@@ -45,7 +44,6 @@ const Search: React.FC<Props> = ({ onSearch }) => {
         />
       </div>
 
-      {/* Location Input */}
       <div className="flex-1">
         <Input
           type="text"
@@ -59,7 +57,6 @@ const Search: React.FC<Props> = ({ onSearch }) => {
         />
       </div>
 
-      {/* Search Button */}
       <Button variant="orange" onClick={handleSearch}>
         Search
       </Button>

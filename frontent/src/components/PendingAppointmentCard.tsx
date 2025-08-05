@@ -1,5 +1,6 @@
 import { Calendar, Clock } from "lucide-react";
 import type { Appointment } from "../types";
+import Avatar from "./Avatar";
 
 interface Props {
   appointment: Appointment;
@@ -10,7 +11,6 @@ const PendingAppointmentCard: React.FC<Props> = ({
   appointment,
   onAnswerRequest,
 }) => {
-  // Format the date string for display
   const formattedDate = new Date(appointment.event_date).toLocaleDateString(
     "en-US",
     {
@@ -20,7 +20,6 @@ const PendingAppointmentCard: React.FC<Props> = ({
     },
   );
 
-  // Extract time from the date string
   const formattedTime = new Date(appointment.event_date).toLocaleTimeString(
     "en-US",
     {
@@ -32,12 +31,10 @@ const PendingAppointmentCard: React.FC<Props> = ({
   return (
     <div className="bg-gray-50 rounded-lg p-4 min-w-0">
       <div className="flex items-start space-x-4">
-        {/* Avatar */}
-        <div className="w-12 h-12 bg-emerald-500 rounded-full flex items-center justify-center text-white text-xl flex-shrink-0">
-          {appointment.guest.name.charAt(0)}
+        <div className="w-12 h-12">
+          <Avatar name={appointment.guest.name} />
         </div>
 
-        {/* Request Details */}
         <div className="flex-1 min-w-0">
           <h3 className="font-medium text-gray-900 mb-1">
             {appointment.guest.name}
@@ -46,7 +43,6 @@ const PendingAppointmentCard: React.FC<Props> = ({
             {appointment.nutritionist_service.service.name}
           </p>
 
-          {/* Date and Time */}
           <div className="flex items-center space-x-4 text-sm text-gray-600 mb-4">
             <div className="flex items-center space-x-1">
               <Calendar className="w-4 h-4 text-emerald-500" />
@@ -58,7 +54,6 @@ const PendingAppointmentCard: React.FC<Props> = ({
             </div>
           </div>
 
-          {/* Answer Request Button */}
           <button
             onClick={() => onAnswerRequest(appointment)}
             className="text-emerald-600 hover:text-emerald-700 text-sm font-medium hover:underline"

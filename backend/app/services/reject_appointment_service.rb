@@ -11,7 +11,7 @@ class RejectAppointmentService
     appointment.update!(state: :rejected)
     AppointmentNotificationJob.perform_later(appointment.id, 'rejected')
     Result.new({ success?: true, appointment: })
-  rescue ActiveRecord::RecordNotFound => e
+  rescue ActiveRecord::RecordInvalid => e
     Result.new({ success?: false, errors: e.record&.errors&.full_messages })
   end
 

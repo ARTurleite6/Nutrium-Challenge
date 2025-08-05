@@ -5,6 +5,7 @@ import type { NutritionistService, AppointmentForm } from "../types";
 import Button from "./Button";
 import Modal from "./Modal";
 import { createAppointment } from "../api/appointments";
+import { useNotification } from "../context/useNotification";
 
 interface AppointmentModalProps {
   isOpen: boolean;
@@ -13,8 +14,10 @@ interface AppointmentModalProps {
 }
 
 interface FormErrors {
-  "guest.email"?: string[];
-  "guest.name"?: string[];
+  guest?: {
+    email?: string[];
+    name?: string[];
+  };
   event_date?: string[];
   general?: string[];
   time?: string[];
@@ -36,6 +39,7 @@ const AppointmentModal: React.FC<AppointmentModalProps> = ({
   const [timeInput, setTimeInput] = useState<string>("");
   const [errors, setErrors] = useState<FormErrors>({});
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const { showNotification } = useNotification();
   const [submitSuccess, setSubmitSuccess] = useState(false);
 
   const resetForm = (): void => {
@@ -60,7 +64,6 @@ const AppointmentModal: React.FC<AppointmentModalProps> = ({
     setIsSubmitting(true);
 
     try {
-      // Combine date and time for the event_date in ISO format
       const eventDateTime = `${appointmentForm.event_date}T${timeInput}:00`;
 
       await createAppointment({
@@ -70,18 +73,30 @@ const AppointmentModal: React.FC<AppointmentModalProps> = ({
       });
 
       setSubmitSuccess(true);
+      showNotification(
+        "Appointment request submitted successfully!",
+        "success",
+      );
       setTimeout(() => {
         handleClose();
       }, 2000);
-    } catch (error: any) {
-      if (error.data?.errors) {
-        setErrors(error.data.errors);
+    } catch (error: unknown) {
+      if (
+        typeof error === "object" &&
+        error !== null &&
+        "data" in error &&
+        typeof error.data === "object" &&
+        error.data !== null &&
+        "errors" in error.data
+      ) {
+        setErrors(error.data.errors as FormErrors);
       } else {
         setErrors({
           general: [
             "Network error. Please check your connection and try again.",
           ],
         });
+        showNotification("Failed to submit appointment request", "error");
       }
     } finally {
       setIsSubmitting(false);
@@ -157,13 +172,16 @@ const AppointmentModal: React.FC<AppointmentModalProps> = ({
                   }));
                   setErrors((prev) => ({
                     ...prev,
-                    "guest.name": undefined,
+                    guest: {
+                      ...prev.guest,
+                      name: [],
+                    },
                   }));
                 }}
                 placeholder="Your full name"
                 icon={<User className="w-5 h-5 text-gray-400" />}
                 iconPosition="left"
-                errors={errors["guest.name"]}
+                errors={errors.guest?.name}
                 disabled={isSubmitting}
               />
 
@@ -181,13 +199,16 @@ const AppointmentModal: React.FC<AppointmentModalProps> = ({
                   }));
                   setErrors((prev) => ({
                     ...prev,
-                    "guest.email": undefined,
+                    guest: {
+                      ...prev.guest,
+                      email: [],
+                    },
                   }));
                 }}
                 placeholder="your.email@example.com"
                 icon={<Mail className="w-5 h-5 text-gray-400" />}
                 iconPosition="left"
-                errors={errors["guest.email"]}
+                errors={errors.guest?.email}
                 disabled={isSubmitting}
               />
 

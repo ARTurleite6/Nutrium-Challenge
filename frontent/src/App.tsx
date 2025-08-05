@@ -3,21 +3,24 @@ import "./App.css";
 import Navbar from "./components/Navbar";
 import PendingAppointments from "./components/PendingAppointments";
 import NutritionistSearch from "./components/NutritionistSearch";
+import { NotificationProvider } from "./context/NotificationContext";
 
 function App() {
   return (
-    <div className="w-full min-h-screen">
-      <BrowserRouter>
-        <Navbar />
-        <Routes>
-          <Route path="/" element={<NutritionistSearch />} />
-          <Route
-            path="/pending_appointments/:id"
-            element={<PendingAppointments />}
-          />
-        </Routes>
-      </BrowserRouter>
-    </div>
+    <NotificationProvider>
+      <div className="w-full min-h-screen">
+        <BrowserRouter>
+          <Navbar />
+          <Routes>
+            <Route path="/" element={<NutritionistSearch />} />
+            <Route
+              path="/pending_appointments/:id"
+              element={<PendingAppointments />}
+            />
+          </Routes>
+        </BrowserRouter>
+      </div>
+    </NotificationProvider>
   );
 }
 

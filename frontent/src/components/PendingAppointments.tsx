@@ -1,31 +1,41 @@
-import { ChevronLeft, ChevronRight, Settings, Share } from "lucide-react";
+import { useCallback } from "react";
+
 import PendingAppointmentCard from "./PendingAppointmentCard";
 import { useState, useEffect } from "react";
 import PendingAppointmentModal from "./PendingAppointmentModal";
 import type { Appointment } from "../types";
 import { useParams } from "react-router-dom";
-import { getAppointments } from "../api/appointments";
+import { useNotification } from "../context/useNotification";
+import {
+  acceptAppointment,
+  getPaginatedAppointments,
+  rejectAppointment,
+} from "../api/appointments";
+import Pagination from "./Pagination";
 
 const PendingAppointments: React.FC = () => {
   const { id } = useParams();
 
-  const [currentIndex, setCurrentIndex] = useState(0);
+  const [currentPage, setCurrentPage] = useState(1);
+  const [perPage] = useState(3);
+  const [totalPages, setTotalPages] = useState(1);
+  const [updateTrigger, setUpdateTrigger] = useState<number>(0);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [currentAppointment, setCurrentAppointment] =
     useState<Appointment | null>(null);
   const [pendingAppointments, setPendingAppointments] = useState<Appointment[]>(
     [],
   );
-  const [, setLoading] = useState(false);
+  const [loading, setLoading] = useState(false);
+  const { showNotification } = useNotification();
 
-  useEffect(() => {
-    // In a real app, you would fetch appointments from an API
-    // For now, use the sample data
+  const refreshAppointments = useCallback(async () => {
     if (!id) return;
     setLoading(true);
-    getAppointments(id)
-      .then((appointments) => {
-        setPendingAppointments(appointments);
+    getPaginatedAppointments(id, currentPage, perPage)
+      .then((response) => {
+        setPendingAppointments(response.appointments);
+        setTotalPages(response.pagination.total_pages);
       })
       .catch((err) => {
         console.error("Error fetching appointments:", err);
@@ -33,23 +43,18 @@ const PendingAppointments: React.FC = () => {
       .finally(() => {
         setLoading(false);
       });
-  }, [id]);
+  }, [id, currentPage, perPage]);
 
-  const itemsPerPage = 3;
-  const totalPages = Math.ceil(pendingAppointments.length / itemsPerPage);
+  useEffect(() => {
+    refreshAppointments();
+  }, [id, currentPage, updateTrigger, refreshAppointments]);
 
-  const goToPrevious = () => {
-    setCurrentIndex((prev) => (prev > 0 ? prev - 1 : totalPages - 1));
-  };
-
-  const goToNext = () => {
-    setCurrentIndex((prev) => (prev < totalPages - 1 ? prev + 1 : 0));
+  const handlePageChange = (page: number) => {
+    setCurrentPage(page);
   };
 
   const getCurrentAppointments = () => {
-    const start = currentIndex * itemsPerPage;
-    const end = start + itemsPerPage;
-    return pendingAppointments.slice(start, end);
+    return pendingAppointments;
   };
 
   const handleAnswerRequest = (appointment: Appointment) => {
@@ -57,29 +62,36 @@ const PendingAppointments: React.FC = () => {
     setIsModalOpen(true);
   };
 
-  const handleAccept = (appointmentId: string) => {
-    // In a real app, you would call an API to accept the appointment
-    console.log(`Accepting appointment with ID: ${appointmentId}`);
-    setPendingAppointments(
-      pendingAppointments.filter((app) => app.id !== appointmentId),
-    );
-    setIsModalOpen(false);
+  const handleAccept = async (appointmentId: string) => {
+    try {
+      console.log(`Accepting appointment with ID: ${appointmentId}`);
+      await acceptAppointment(appointmentId);
+      setIsModalOpen(false);
+      setUpdateTrigger((prev) => prev + 1);
+      showNotification("Appointment accepted successfully", "success");
+    } catch (error) {
+      console.error("Error accepting appointment:", error);
+      showNotification("Failed to accept appointment", "error");
+    }
   };
 
-  const handleDecline = (appointmentId: string) => {
-    // In a real app, you would call an API to decline the appointment
-    console.log(`Declining appointment with ID: ${appointmentId}`);
-    setPendingAppointments(
-      pendingAppointments.filter((app) => app.id !== appointmentId),
-    );
-    setIsModalOpen(false);
+  const handleReject = async (appointmentId: string) => {
+    try {
+      console.log(`Declining appointment with ID: ${appointmentId}`);
+      await rejectAppointment(appointmentId);
+      setIsModalOpen(false);
+      setUpdateTrigger((prev) => prev + 1);
+      showNotification("Appointment rejected successfully", "success");
+    } catch (error) {
+      console.error("Error rejecting appointment:", error);
+      showNotification("Failed to reject appointment", "error");
+    }
   };
 
   return (
     <div className="min-h-screen bg-gray-50 p-6">
       <div className="max-w-6xl mx-auto">
         <div className="bg-white rounded-lg border border-gray-200 p-6">
-          {/* Header */}
           <div className="flex items-center justify-between mb-6">
             <div>
               <h2 className="text-lg font-medium text-gray-800 mb-1">
@@ -89,32 +101,8 @@ const PendingAppointments: React.FC = () => {
                 Accept or reject new pending requests
               </p>
             </div>
-            <div className="flex items-center space-x-2">
-              {/* Navigation Arrows */}
-              <button
-                onClick={goToPrevious}
-                className="p-2 hover:bg-gray-100 rounded-md transition-colors"
-                disabled={pendingAppointments.length <= itemsPerPage}
-              >
-                <ChevronLeft className="w-4 h-4 text-gray-400" />
-              </button>
-              <button
-                onClick={goToNext}
-                className="p-2 hover:bg-gray-100 rounded-md transition-colors"
-                disabled={pendingAppointments.length <= itemsPerPage}
-              >
-                <ChevronRight className="w-4 h-4 text-gray-400" />
-              </button>
-              <button className="p-2 hover:bg-gray-100 rounded-md">
-                <Share className="w-4 h-4 text-gray-400" />
-              </button>
-              <button className="p-2 hover:bg-gray-100 rounded-md">
-                <Settings className="w-4 h-4 text-gray-400" />
-              </button>
-            </div>
           </div>
 
-          {/* Carousel Content */}
           <div className="overflow-hidden">
             <div className="flex flex-col md:flex-row md:space-x-4 space-y-4 md:space-y-0">
               {getCurrentAppointments().map((appointment) => (
@@ -128,27 +116,17 @@ const PendingAppointments: React.FC = () => {
             </div>
           </div>
 
-          {/* Page Indicators */}
           {totalPages > 1 && (
-            <div className="flex justify-center mt-6 space-x-2">
-              {Array.from({ length: totalPages }).map((_, index) => (
-                <button
-                  key={index}
-                  onClick={() => setCurrentIndex(index)}
-                  className={`w-2 h-2 rounded-full transition-colors ${
-                    index === currentIndex
-                      ? "bg-emerald-500"
-                      : "bg-gray-300 hover:bg-gray-400"
-                  }`}
-                />
-              ))}
-            </div>
+            <Pagination
+              currentPage={currentPage}
+              totalPages={totalPages}
+              onPageChange={handlePageChange}
+              disabled={loading}
+            />
           )}
 
-          {/* Request Counter */}
           <div className="text-center mt-4 text-sm text-gray-500">
-            Showing {getCurrentAppointments().length} of{" "}
-            {pendingAppointments.length} requests
+            {loading ? "Loading..." : `Page ${currentPage} of ${totalPages}`}
           </div>
         </div>
       </div>
@@ -158,7 +136,7 @@ const PendingAppointments: React.FC = () => {
         onClose={() => setIsModalOpen(false)}
         appointment={currentAppointment}
         onAccept={handleAccept}
-        onDecline={handleDecline}
+        onDecline={handleReject}
       />
     </div>
   );

@@ -53,3 +53,10 @@ export interface AppointmentForm {
   };
   event_date: string;
 }
+
+export interface PaginationData {
+  current_page: number;
+  per_page: number;
+  total_pages: number;
+  total_count: number;
+}

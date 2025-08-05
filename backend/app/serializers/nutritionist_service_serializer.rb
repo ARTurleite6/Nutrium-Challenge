@@ -6,4 +6,8 @@ class NutritionistServiceSerializer < ActiveModel::Serializer
   belongs_to :nutritionist, serializer: NutritionistSerializer
   belongs_to :service, serializer: ServiceSerializer
   belongs_to :location, serializer: LocationSerializer
+
+  def pricing
+    format('%.2f', object.pricing)
+  end
 end

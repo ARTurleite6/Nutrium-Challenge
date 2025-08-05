@@ -13,7 +13,6 @@ const Modal: React.FC<React.PropsWithChildren<Props>> = ({
   title,
   children,
 }) => {
-  // Close modal when pressing Escape key
   useEffect(() => {
     const handleEscKey = (event: KeyboardEvent) => {
       if (event.key === "Escape" && isOpen) {
@@ -23,19 +22,16 @@ const Modal: React.FC<React.PropsWithChildren<Props>> = ({
 
     window.addEventListener("keydown", handleEscKey);
 
-    // Prevent scrolling of the background content when modal is open
     if (isOpen) {
       document.body.style.overflow = "hidden";
     }
 
-    // Cleanup function
     return () => {
       window.removeEventListener("keydown", handleEscKey);
       document.body.style.overflow = "unset";
     };
   }, [isOpen, onClose]);
 
-  // If modal is not open, don't render anything
   if (!isOpen) return null;
 
   return (

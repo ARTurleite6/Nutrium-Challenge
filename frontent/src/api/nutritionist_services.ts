@@ -1,10 +1,17 @@
-import type { NutritionistService } from "../types";
+import type { NutritionistService, PaginationData } from "../types";
 import apiClient from "./apiClient";
+
+export type GetNutritionistServicesResponse = {
+  nutritionist_services: NutritionistService[];
+  pagination: PaginationData;
+};
 
 export async function getNutritionistServices(
   searchQuery?: string,
   location?: string,
-): Promise<NutritionistService[]> {
+  page?: number,
+  perPage?: number,
+): Promise<GetNutritionistServicesResponse> {
   const queryParams: string[] = [];
   let url = "/nutritionist_services";
 
@@ -14,6 +21,14 @@ export async function getNutritionistServices(
 
   if (location) {
     queryParams.push(`location=${encodeURIComponent(location)}`);
+  }
+
+  if (page) {
+    queryParams.push(`page=${page}`);
+  }
+
+  if (perPage) {
+    queryParams.push(`per_page=${perPage}`);
   }
 
   if (queryParams.length > 0) {

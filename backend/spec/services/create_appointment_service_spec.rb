@@ -69,23 +69,6 @@ RSpec.describe CreateAppointmentService do
       end
     end
 
-    context 'when guest email already exists' do
-      let!(:existing_guest) { create(:guest, name: 'Jane Smith', email: 'john@example.com') }
-
-      it 'does not create a new guest' do
-        expect do
-          service_instance.perform
-        end.not_to(change { Guest.count })
-      end
-
-      it 'returns an error' do
-        result = service_instance.perform
-
-        expect(result.success?).to be(false)
-        expect(result.errors.full_messages).to include('Guest email has already been taken')
-      end
-    end
-
     context 'when guest already has an appointment' do
       let(:existing_guest) { create(:guest, name: 'John Doe', email: 'john@example.com') }
       let!(:existing_appointment) { create(:appointment, guest: existing_guest) }
@@ -98,7 +81,24 @@ RSpec.describe CreateAppointmentService do
           end.to change { Appointment.count }.by(1)
 
           expect(create_appointment.success?).to be(true)
-          expect(existing_appointment.state).to eq('rejected')
+          expect(existing_appointment.reload.state).to eq('rejected')
+        end
+      end
+    end
+
+    context 'when guest already has a pending appointment and gives different name' do
+      let(:existing_guest) { create(:guest, name: 'Cenas', email: 'john@example.com') }
+      let!(:existing_appointment) { create(:appointment, guest: existing_guest, state: :pending) }
+      let(:create_appointment) { service_instance.perform }
+
+      it 'creates a new appointment and rejects the pending appointment' do
+        aggregate_failures do
+          expect do
+            create_appointment
+          end.to change { Appointment.count }.by(1)
+
+          expect(create_appointment.success?).to be(true)
+          expect(existing_guest.reload.name).to eq('John Doe')
         end
       end
     end
@@ -128,7 +128,8 @@ RSpec.describe CreateAppointmentService do
             result
           end.not_to(change { Appointment.count })
           expect(result.success?).to be(false)
-          expect(result.errors.full_messages).to include('Event date must be in the future')
+          expect(result.errors).to include(:appointment)
+          expect(result.errors[:appointment].full_messages).to include('Event date must be in the future')
         end
       end
     end
@@ -145,7 +146,8 @@ RSpec.describe CreateAppointmentService do
             result
           end.not_to(change { Appointment.count })
           expect(result.success?).to be(false)
-          expect(result.errors.full_messages).to include("Guest name can't be blank", 'Guest email is invalid')
+          expect(result.errors).to include(:guest)
+          expect(result.errors[:guest].full_messages).to include("Name can't be blank", 'Email is invalid')
         end
       end
     end
