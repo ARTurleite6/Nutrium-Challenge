@@ -4,11 +4,16 @@ export interface Nutritionist {
   title: string;
 }
 
+export type GroupedNutritionistService = {
+  nutritionist: Nutritionist;
+  services: NutritionistService[];
+};
+
 export interface Appointment {
   id: string;
   guest: Guest;
   event_date: string;
-  nutritionist_service: NutritionistService;
+  nutritionist_service: NutritionistServiceWithNutritionist;
 }
 
 export interface Guest {
@@ -26,10 +31,18 @@ export interface Location {
   full_address: string;
 }
 
+export interface NutritionistServiceWithNutritionist {
+  id: string;
+  pricing: number;
+  service: Service;
+  nutritionist: Nutritionist;
+  location: Location;
+  delivery_method: DeliveryMethod;
+}
+
 export interface NutritionistService {
   id: string;
   pricing: number;
-  nutritionist: Nutritionist;
   service: Service;
   location: Location;
   delivery_method: DeliveryMethod;

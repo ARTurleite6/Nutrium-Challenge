@@ -1,7 +1,10 @@
 import { useState } from "react";
 import Input from "./Input";
 import { Calendar, X, Mail, User, Clock } from "lucide-react";
-import type { NutritionistService, AppointmentForm } from "../types";
+import type {
+  AppointmentForm,
+  NutritionistServiceWithNutritionist,
+} from "../types";
 import Button from "./Button";
 import Modal from "./Modal";
 import { createAppointment } from "../api/appointments";
@@ -10,7 +13,7 @@ import { useNotification } from "../context/useNotification";
 interface AppointmentModalProps {
   isOpen: boolean;
   onClose: () => void;
-  selectedNutritionist: NutritionistService | null;
+  selectedNutritionist: NutritionistServiceWithNutritionist | null;
 }
 
 interface FormErrors {

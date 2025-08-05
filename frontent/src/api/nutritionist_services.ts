@@ -1,8 +1,12 @@
-import type { NutritionistService, PaginationData } from "../types";
+import type {
+  Nutritionist,
+  NutritionistService,
+  PaginationData,
+} from "../types";
 import apiClient from "./apiClient";
 
 export type GetNutritionistServicesResponse = {
-  nutritionist_services: NutritionistService[];
+  nutritionists: GroupedNutritionistService[];
   pagination: PaginationData;
 };
 

@@ -1,12 +1,16 @@
 import { Calendar, ChevronDown, Euro, MapPin, Star } from "lucide-react";
-import type { DeliveryMethod, NutritionistService } from "../types";
+import type {
+  DeliveryMethod,
+  NutritionistServiceWithNutritionist,
+} from "../types";
 import Button from "./Button";
 import { useState, useRef, useEffect } from "react";
 import Avatar from "./Avatar";
+import type { GroupedNutritionistService } from "../types";
 
 type Props = {
-  nutritionist_services: NutritionistService[];
-  onScheduleAppointment: (service: NutritionistService) => void;
+  nutritionist_services: GroupedNutritionistService;
+  onScheduleAppointment: (service: NutritionistServiceWithNutritionist) => void;
 };
 
 const NutritionistCard: React.FC<Props> = ({
@@ -17,8 +21,11 @@ const NutritionistCard: React.FC<Props> = ({
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
   const dropdownRef = useRef<HTMLDivElement>(null);
 
-  const selectedService = nutritionist_services[selectedServiceIndex];
-  const nutritionist = selectedService.nutritionist;
+  const selectedService: NutritionistServiceWithNutritionist = {
+    ...nutritionist_services.services[selectedServiceIndex],
+    nutritionist: nutritionist_services.nutritionist,
+  };
+  const nutritionist = nutritionist_services.nutritionist;
   const deliveryMethodLabels: Record<DeliveryMethod, string> = {
     in_person: "In Person",
     online: "Online",
@@ -131,7 +138,7 @@ const NutritionistCard: React.FC<Props> = ({
 
             {isDropdownOpen && (
               <div className="absolute top-full left-0 mt-2 bg-white border border-gray-200 rounded-md shadow-lg z-10 min-w-[350px] max-w-[500px]">
-                {nutritionist_services.map((service, index) => (
+                {nutritionist_services.services.map((service, index) => (
                   <button
                     key={service.id}
                     onClick={() => handleServiceSelect(index)}

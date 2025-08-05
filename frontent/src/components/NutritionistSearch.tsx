@@ -1,5 +1,8 @@
 import { useState, useEffect, useCallback } from "react";
-import type { NutritionistService } from "../types";
+import type {
+  GroupedNutritionistService,
+  NutritionistServiceWithNutritionist,
+} from "../types";
 
 import NutritionistCard from "./NutritionistCard";
 import Search from "./Search";
@@ -14,24 +17,19 @@ type SearchParams = {
 
 const NutritionistSearch: React.FC = () => {
   const [nutritionistServices, setNutritionistServices] = useState<
-    NutritionistService[]
+    GroupedNutritionistService[]
   >([]);
   const [loading, setLoading] = useState<boolean>(false);
   const [showModal, setShowModal] = useState<boolean>(false);
   const [selectedNutritionist, setSelectedNutritionist] =
-    useState<NutritionistService | null>(null);
+    useState<NutritionistServiceWithNutritionist | null>(null);
+
   const [currentPage, setCurrentPage] = useState<number>(1);
   const [totalPages, setTotalPages] = useState<number>(1);
   const [perPage] = useState<number>(10);
   const [searchParams, setSearchParams] = useState<SearchParams | undefined>(
     undefined,
   );
-
-  const getSortedServices = useCallback((services: NutritionistService[]) => {
-    return services.sort((a, b) =>
-      a.nutritionist.name.localeCompare(b.nutritionist.name),
-    );
-  }, []);
 
   const fetchNutritionists = useCallback(
     async (params?: SearchParams): Promise<void> => {
@@ -50,9 +48,7 @@ const NutritionistSearch: React.FC = () => {
           perPage,
         );
 
-        setNutritionistServices(
-          getSortedServices(response.nutritionist_services || []),
-        );
+        setNutritionistServices(response.nutritionists || []);
         setTotalPages(response.pagination.total_pages);
         setCurrentPage(response.pagination.current_page);
       } catch (error) {
@@ -62,7 +58,7 @@ const NutritionistSearch: React.FC = () => {
         setLoading(false);
       }
     },
-    [getSortedServices, currentPage, perPage, searchParams],
+    [currentPage, perPage, searchParams],
   );
 
   useEffect(() => {
@@ -70,7 +66,7 @@ const NutritionistSearch: React.FC = () => {
   }, [currentPage, fetchNutritionists]);
 
   const openAppointmentModal = (
-    nutritionistService: NutritionistService,
+    nutritionistService: NutritionistServiceWithNutritionist,
   ): void => {
     setSelectedNutritionist(nutritionistService);
     setShowModal(true);
@@ -88,14 +84,6 @@ const NutritionistSearch: React.FC = () => {
     }
   };
 
-  const groupedServices: { [key: string]: NutritionistService[] } = {};
-  nutritionistServices.forEach((service) => {
-    if (!groupedServices[service.nutritionist.id]) {
-      groupedServices[service.nutritionist.id] = [];
-    }
-    groupedServices[service.nutritionist.id].push(service);
-  });
-
   return (
     <div className="min-h-screen bg-gray-50 w-full">
       <div className="w-full">
@@ -112,17 +100,15 @@ const NutritionistSearch: React.FC = () => {
               Loading nutritionists...
             </p>
           </div>
-        ) : Object.keys(groupedServices).length > 0 ? (
+        ) : nutritionistServices.length > 0 ? (
           <div className="space-y-8">
-            {Object.entries(groupedServices).map(
-              ([nutritionistId, services]) => (
-                <NutritionistCard
-                  key={nutritionistId}
-                  nutritionist_services={services}
-                  onScheduleAppointment={openAppointmentModal}
-                />
-              ),
-            )}
+            {nutritionistServices.map((nutritionist_services) => (
+              <NutritionistCard
+                key={nutritionist_services.nutritionist.id}
+                nutritionist_services={nutritionist_services}
+                onScheduleAppointment={openAppointmentModal}
+              />
+            ))}
           </div>
         ) : (
           <div className="text-center py-16">

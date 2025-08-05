@@ -3,6 +3,9 @@
 class NutritionistsController < ApplicationController
   before_action :set_nutritionist
 
+  def index
+  end
+
   def appointments
     page = params.fetch(:page, 1).to_i
     per_page = params.fetch(:per_page, 10).to_i
