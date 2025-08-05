@@ -1,11 +1,16 @@
 import { Calendar, ChevronDown, Euro, MapPin, Star } from "lucide-react";
-import type { DeliveryMethod, NutritionistService } from "../types";
+import type {
+  DeliveryMethod,
+  NutritionistServiceWithNutritionist,
+} from "../types";
 import Button from "./Button";
 import { useState, useRef, useEffect } from "react";
+import Avatar from "./Avatar";
+import type { GroupedNutritionistService } from "../types";
 
 type Props = {
-  nutritionist_services: NutritionistService[];
-  onScheduleAppointment: (service: NutritionistService) => void;
+  nutritionist_services: GroupedNutritionistService;
+  onScheduleAppointment: (service: NutritionistServiceWithNutritionist) => void;
 };
 
 const NutritionistCard: React.FC<Props> = ({
@@ -16,8 +21,11 @@ const NutritionistCard: React.FC<Props> = ({
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
   const dropdownRef = useRef<HTMLDivElement>(null);
 
-  const selectedService = nutritionist_services[selectedServiceIndex];
-  const nutritionist = selectedService.nutritionist;
+  const selectedService: NutritionistServiceWithNutritionist = {
+    ...nutritionist_services.services[selectedServiceIndex],
+    nutritionist: nutritionist_services.nutritionist,
+  };
+  const nutritionist = nutritionist_services.nutritionist;
   const deliveryMethodLabels: Record<DeliveryMethod, string> = {
     in_person: "In Person",
     online: "Online",
@@ -28,7 +36,6 @@ const NutritionistCard: React.FC<Props> = ({
     setIsDropdownOpen(false);
   };
 
-  // Close dropdown when clicking outside
   useEffect(() => {
     const handleClickOutside = (event: MouseEvent) => {
       if (
@@ -48,16 +55,12 @@ const NutritionistCard: React.FC<Props> = ({
   return (
     <div className="bg-white rounded-lg shadow-sm border border-gray-100 p-6 max-w-4xl mx-auto">
       <div className="flex items-start justify-between">
-        {/* Left section - Profile info */}
         <div className="flex items-start space-x-4">
-          {/* Avatar */}
-          <div className="w-20 h-20 bg-blue-100 rounded-full flex items-center justify-center text-3xl">
-            {"image" /*nutritionist.avatar */}
+          <div className="w-20 h-20">
+            <Avatar name={nutritionist.name} />
           </div>
 
-          {/* Profile details */}
           <div className="flex-1">
-            {/* Name and follow-up badge */}
             <div className="flex items-center space-x-3 mb-2">
               {
                 <div className="flex items-center space-x-1 bg-emerald-100 text-emerald-600 px-3 py-1 rounded-full text-sm font-medium">
@@ -73,7 +76,6 @@ const NutritionistCard: React.FC<Props> = ({
 
             <p className="text-gray-500 text-sm mb-4">{nutritionist.title}</p>
 
-            {/* Service info with location */}
             <div className="flex items-start space-x-2 text-sm">
               <MapPin className="w-4 h-4 text-emerald-500 flex-shrink-0 mt-1" />
               <div className="flex flex-col space-y-2">
@@ -92,9 +94,7 @@ const NutritionistCard: React.FC<Props> = ({
           </div>
         </div>
 
-        {/* Right section - Actions and pricing */}
         <div className="flex flex-col space-y-3 w-1/3">
-          {/* Schedule appointment button */}
           <Button
             onClick={() => onScheduleAppointment(selectedService)}
             variant="orange-light"
@@ -102,7 +102,6 @@ const NutritionistCard: React.FC<Props> = ({
             Schedule appointment
           </Button>
 
-          {/* Website button */}
           <Button
             variant="green-light"
             onClick={() => {
@@ -113,7 +112,6 @@ const NutritionistCard: React.FC<Props> = ({
             Website
           </Button>
 
-          {/* Appointment details */}
           <div
             ref={dropdownRef}
             className="relative pt-4 border-t border-gray-100"
@@ -138,10 +136,9 @@ const NutritionistCard: React.FC<Props> = ({
               </div>
             </button>
 
-            {/* Dropdown Menu */}
             {isDropdownOpen && (
               <div className="absolute top-full left-0 mt-2 bg-white border border-gray-200 rounded-md shadow-lg z-10 min-w-[350px] max-w-[500px]">
-                {nutritionist_services.map((service, index) => (
+                {nutritionist_services.services.map((service, index) => (
                   <button
                     key={service.id}
                     onClick={() => handleServiceSelect(index)}

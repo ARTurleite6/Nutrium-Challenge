@@ -10,8 +10,10 @@ RSpec.describe 'Appointments', type: :request do
     let(:valid_params) do
       {
         appointment: {
-          guest_name: 'João Silva',
-          guest_email: 'joao@example.com',
+          guest_attributes: {
+            name: 'João Silva',
+            email: 'joao@example.com'
+          },
           nutritionist_service_id: nutritionist_service.id,
           event_date: 1.week.from_now.iso8601
         }
@@ -69,7 +71,7 @@ RSpec.describe 'Appointments', type: :request do
       let!(:existing_guest) { create(:guest, name: 'João', email: 'joao@example.com') }
       let(:params_with_different_name) do
         valid_params.tap do |p|
-          p[:appointment][:guest_name] = 'Dr. João Silva'
+          p[:appointment][:guest_attributes][:name] = 'Dr. João Silva'
         end
       end
 
@@ -90,7 +92,6 @@ RSpec.describe 'Appointments', type: :request do
 
       it 'returns success response' do
         post appointments_path, params: params_with_different_name, as: :json
-
         expect(response).to have_http_status(:created)
       end
     end
@@ -105,7 +106,13 @@ RSpec.describe 'Appointments', type: :request do
       it 'returns unprocessable entity status' do
         post appointments_path, params: invalid_params, as: :json
 
-        expect(response).to have_http_status(:unprocessable_content)
+        aggregate_failures do
+          expect(response).to have_http_status(:unprocessable_content)
+          expect(json['errors']).to include('appointment')
+          expect(json['errors']['appointment']).to eq({
+                                                        'nutritionist_service' => ['must exist']
+                                                      })
+        end
       end
 
       it 'returns error messages' do
@@ -123,7 +130,9 @@ RSpec.describe 'Appointments', type: :request do
       let(:missing_guest_name) do
         {
           appointment: {
-            guest_email: 'test@example.com',
+            guest_attributes: {
+              email: 'test@example.com'
+            },
             nutritionist_service_id: nutritionist_service.id,
             event_date: 1.week.from_now.iso8601
           }
@@ -133,23 +142,33 @@ RSpec.describe 'Appointments', type: :request do
       it 'handles missing guest_name parameter' do
         post appointments_path, params: missing_guest_name, as: :json
 
-        # This might create a guest with nil name, depending on your validation
-        # Adjust expectation based on your Guest model validations
-        expect(response).to have_http_status(:unprocessable_content)
+        aggregate_failures do
+          expect(response).to have_http_status(:unprocessable_content)
+          expect(json['errors']).to include('guest')
+          expect(json['errors']).to eq({
+                                         'guest' => { 'name' => ['can\'t be blank'] }
+                                       })
+        end
       end
     end
 
     context 'with invalid guest email format' do
       let(:invalid_email_params) do
         valid_params.tap do |p|
-          p[:appointment][:guest_email] = 'invalid-email'
+          p[:appointment][:guest_attributes][:email] = 'invalid-email'
         end
       end
 
       it 'returns unprocessable entity status' do
         post appointments_path, params: invalid_email_params, as: :json
 
-        expect(response).to have_http_status(:unprocessable_content)
+        aggregate_failures do
+          expect(response).to have_http_status(:unprocessable_content)
+          expect(json['errors']).to include('guest')
+          expect(json['errors']).to eq({
+                                         'guest' => { 'email' => ['is invalid'] }
+                                       })
+        end
       end
     end
   end

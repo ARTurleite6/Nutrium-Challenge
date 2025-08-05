@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 class AppointmentsController < ApplicationController
-  before_action :set_appointment, only: %i[accept refuse]
+  before_action :set_appointment, only: %i[accept reject]
 
   def create
     result = CreateAppointmentService.new(appointment_params).perform
@@ -22,10 +22,9 @@ class AppointmentsController < ApplicationController
     else
       render json: { errors: result.errors }, serializer: AppointmentSerializer
     end
-    @appointment.update!(state: :accepted)
   end
 
-  def refuse
+  def reject
     result = RejectAppointmentService.new(@appointment).perform
 
     if result.success?
@@ -38,7 +37,7 @@ class AppointmentsController < ApplicationController
   private
 
   def set_appointment
-    @appointment = Appointment.find(params[:id])
+    @appointment = Appointment.find(params[:appointment_id])
   end
 
   def appointment_params

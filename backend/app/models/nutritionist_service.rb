@@ -9,6 +9,7 @@ class NutritionistService < ApplicationRecord
   enum :delivery_method, { in_person: 0, online: 1 }
 
   validates :pricing, presence: true, numericality: { greater_than: 0 }
+  validates :delivery_method, presence: true
   validates :nutritionist_id, uniqueness: { scope: %i[service_id location_id delivery_method] }
 
   scope :search_by_nutritionist_or_service, lambda { |query|

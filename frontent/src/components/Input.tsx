@@ -66,7 +66,9 @@ const Input = forwardRef<HTMLInputElement, InputProps>(
           )}
         </div>
 
-        {errors && <p className="mt-1 text-sm text-red-600">{errors}</p>}
+        {errors && (
+          <p className="mt-1 text-sm text-red-600">{errors.join(", ")}</p>
+        )}
 
         {helperText && !errors && (
           <p className="mt-1 text-sm text-gray-500">{helperText}</p>

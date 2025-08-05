@@ -13,6 +13,7 @@ RSpec.describe Nutritionist, type: :model do
 
   describe 'validations' do
     it { should validate_presence_of(:name) }
+    it { should validate_presence_of(:title) }
     it { should validate_presence_of(:license_number) }
     it { should validate_uniqueness_of(:license_number) }
   end

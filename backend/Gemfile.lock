@@ -258,6 +258,12 @@ GEM
     rdoc (6.14.2)
       erb
       psych (>= 4.0.0)
+    redis (5.4.1)
+      redis-client (>= 0.22.0)
+    redis-client (0.25.1)
+      connection_pool
+    redis-namespace (1.11.0)
+      redis (>= 4)
     regexp_parser (2.10.0)
     reline (0.6.2)
       io-console (~> 0.5)
@@ -380,6 +386,8 @@ DEPENDENCIES
   puma (>= 5.0)
   rack-cors
   rails (~> 8.0.2)
+  redis (~> 5.4)
+  redis-namespace (~> 1.11)
   rspec-rails (~> 8.0)
   rubocop (~> 1.79)
   rubocop-performance (~> 1.25)

@@ -31,7 +31,7 @@ locations = [
     coordinates: [-8.4103, 40.2033]
   },
   {
-    full_address: 'Rua Dr. Francisco Sá Carneiro 987, 4710-057 Braga',
+    full_address: 'Rua Francisco Sá Carneiro 987, 4710-057 Braga',
     city: 'Braga',
     coordinates: [-8.4261, 41.5454]
   },
@@ -75,18 +75,18 @@ end
 
 # Updated nutritionists data with license numbers and titles
 nutritionists_data = [
-  { name: 'Dr. Maria Silva', license_number: '2963N', title: 'Dietitian' },
-  { name: 'Dr. João Santos', license_number: '1847N', title: 'Sports Nutritionist' },
-  { name: 'Dr. Ana Costa', license_number: '3291N', title: 'Clinical Nutritionist' },
-  { name: 'Dr. Pedro Oliveira', license_number: '4152N', title: 'Pediatric Nutritionist' },
-  { name: 'Dr. Catarina Ferreira', license_number: '2785N', title: 'Dietitian' },
-  { name: 'Dr. Miguel Rodrigues', license_number: '3947N', title: 'Sports Nutritionist' },
-  { name: 'Dr. Sofia Martins', license_number: '1632N', title: 'Clinical Nutritionist' },
-  { name: 'Dr. Ricardo Pereira', license_number: '5284N', title: 'Nutritionist' },
-  { name: 'Dr. Beatriz Gomes', license_number: '2974N', title: 'Registered Dietitian' },
-  { name: 'Dr. Tiago Almeida', license_number: '4157N', title: 'Sports Nutritionist' },
-  { name: 'Dr. Inês Carvalho', license_number: '3628N', title: 'Clinical Nutritionist' },
-  { name: 'Dr. Nuno Ribeiro', license_number: '1893N', title: 'Nutritionist' }
+  { name: 'Maria Silva', license_number: '2963N', title: 'Dietitian' },
+  { name: 'João Santos', license_number: '1847N', title: 'Sports Nutritionist' },
+  { name: 'Ana Costa', license_number: '3291N', title: 'Clinical Nutritionist' },
+  { name: 'Pedro Oliveira', license_number: '4152N', title: 'Pediatric Nutritionist' },
+  { name: 'Catarina Ferreira', license_number: '2785N', title: 'Dietitian' },
+  { name: 'Miguel Rodrigues', license_number: '3947N', title: 'Sports Nutritionist' },
+  { name: 'Sofia Martins', license_number: '1632N', title: 'Clinical Nutritionist' },
+  { name: 'Ricardo Pereira', license_number: '5284N', title: 'Nutritionist' },
+  { name: 'Beatriz Gomes', license_number: '2974N', title: 'Registered Dietitian' },
+  { name: 'Tiago Almeida', license_number: '4157N', title: 'Sports Nutritionist' },
+  { name: 'Inês Carvalho', license_number: '3628N', title: 'Clinical Nutritionist' },
+  { name: 'Nuno Ribeiro', license_number: '1893N', title: 'Nutritionist' }
 ]
 
 created_nutritionists = nutritionists_data.map do |nutritionist_data|

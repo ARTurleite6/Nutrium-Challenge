@@ -25,7 +25,6 @@ ActiveRecord::Schema[8.0].define(version: 20_250_804_124_611) do
     t.datetime 'created_at', null: false
     t.datetime 'updated_at', null: false
     t.index ['event_date'], name: 'index_appointments_on_event_date'
-    t.index ['guest_id'], name: 'idx_one_pending_per_guest', unique: true, where: '(state = 0)'
     t.index ['guest_id'], name: 'index_appointments_on_guest_id'
     t.index ['nutritionist_service_id'], name: 'index_appointments_on_nutritionist_service_id'
     t.index ['state'], name: 'index_appointments_on_state'
@@ -39,11 +38,13 @@ ActiveRecord::Schema[8.0].define(version: 20_250_804_124_611) do
   end
 
   create_table 'locations', id: :uuid, default: -> { 'gen_random_uuid()' }, force: :cascade do |t|
-    t.text 'full_address'
-    t.string 'city'
-    t.point 'coordinates'
+    t.text 'full_address', null: false
+    t.string 'city', null: false
+    t.point 'coordinates', null: false
     t.datetime 'created_at', null: false
     t.datetime 'updated_at', null: false
+    t.index ['city'], name: 'index_locations_on_city'
+    t.index ['coordinates'], name: 'index_locations_on_coordinates', using: :gist
   end
 
   create_table 'nutritionist_services', id: :uuid, default: -> { 'gen_random_uuid()' }, force: :cascade do |t|
@@ -54,8 +55,6 @@ ActiveRecord::Schema[8.0].define(version: 20_250_804_124_611) do
     t.datetime 'created_at', null: false
     t.datetime 'updated_at', null: false
     t.integer 'delivery_method', default: 0, null: false
-    t.integer 'appointment_type', default: 0, null: false
-    t.index ['appointment_type'], name: 'index_nutritionist_services_on_appointment_type'
     t.index ['delivery_method'], name: 'index_nutritionist_services_on_delivery_method'
     t.index ['location_id'], name: 'index_nutritionist_services_on_location_id'
     t.index ['nutritionist_id'], name: 'index_nutritionist_services_on_nutritionist_id'
