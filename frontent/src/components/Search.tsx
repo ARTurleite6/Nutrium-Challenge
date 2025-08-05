@@ -2,6 +2,7 @@ import { MapPin, Search as SearchIcon } from "lucide-react";
 import { useCallback, useState } from "react";
 import Button from "./Button";
 import Input from "./Input";
+import { useTranslation } from "react-i18next";
 
 type SearchParams = {
   searchTerm: string;
@@ -15,6 +16,8 @@ type Props = {
 const Search: React.FC<Props> = ({ onSearch }) => {
   const [searchTerm, setSearchTerm] = useState<string>("");
   const [location, setLocation] = useState<string>("");
+
+  const { t } = useTranslation();
 
   const handleSearch = useCallback((): void => {
     onSearch({ searchTerm, location });
@@ -34,7 +37,7 @@ const Search: React.FC<Props> = ({ onSearch }) => {
       <div className="flex-1">
         <Input
           type="text"
-          placeholder="Name, service, online appointment..."
+          placeholder={t("search.placeholder.search")}
           value={searchTerm}
           onChange={(e) => setSearchTerm(e.target.value)}
           onKeyDown={handleKeyPress}
@@ -47,7 +50,7 @@ const Search: React.FC<Props> = ({ onSearch }) => {
       <div className="flex-1">
         <Input
           type="text"
-          placeholder="Location..."
+          placeholder={t("search.placeholder.location")}
           value={location}
           onChange={(e) => setLocation(e.target.value)}
           onKeyDown={handleKeyPress}
@@ -58,7 +61,7 @@ const Search: React.FC<Props> = ({ onSearch }) => {
       </div>
 
       <Button variant="orange" onClick={handleSearch}>
-        Search
+        {t("search.button")}
       </Button>
     </div>
   );

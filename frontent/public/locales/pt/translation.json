@@ -1,0 +1,94 @@
+{
+  "app": {
+    "title": "Nutrium"
+  },
+  "navbar": {
+    "cta": "Você é um profissional de nutrição? Conheça nosso software"
+  },
+  "search": {
+    "placeholder": {
+      "search": "Nome, serviço, consulta online...",
+      "location": "Localização..."
+    },
+    "button": "Pesquisar",
+    "noResults": {
+      "title": "Nenhum nutricionista encontrado",
+      "subtitle": "Experimente um termo de pesquisa diferente ou navegue por todos os nutricionistas disponíveis."
+    },
+    "loading": "Carregando nutricionistas..."
+  },
+  "nutritionistCard": {
+    "follow-up": "ACOMPANHAMENTO",
+    "website": "Site",
+    "schedule": "Agendar consulta",
+    "delivery": {
+      "follow_up": {
+        "in_person": "Acompanhamento presencial",
+        "online": "Acompanhamento online"
+      }
+    }
+  },
+  "appointment": {
+    "schedule": "Agendar consulta",
+    "website": "Website"
+  },
+  "appointmentModal": {
+    "title": "Agendar Consulta",
+    "success": {
+      "title": "✅ Solicitação de consulta enviada com sucesso!",
+      "message": "Você receberá um email de confirmação em breve."
+    },
+    "form": {
+      "fullName": "Nome Completo",
+      "fullName_placeholder": "Seu nome completo",
+      "email": "Endereço de Email",
+      "email_placeholder": "seu.email@exemplo.com",
+      "date": "Data",
+      "time": "Horário"
+    },
+    "buttons": {
+      "cancel": "Cancelar",
+      "submit": "Solicitar Consulta",
+      "submitting": "Enviando..."
+    }
+  },
+  "pendingAppointments": {
+    "title": "Solicitações Pendentes",
+    "subtitle": "Aceitar ou rejeitar novas solicitações pendentes",
+    "answerRequest": "Responder solicitação",
+    "actions": {
+      "accept": "Aceitar",
+      "decline": "Recusar"
+    },
+    "noRequest": "Nenhuma solicitação para exibir.",
+    "page": "Página {{current}} de {{total}}",
+    "loading": "Carregando..."
+  },
+  "pagination": {
+    "previous": "Página anterior",
+    "next": "Próxima página"
+  },
+  "language": {
+    "en": "Inglês",
+    "pt": "Português",
+    "fr": "Francês"
+  },
+  "errors": {
+    "network": "Erro de rede. Por favor, verifique sua conexão e tente novamente.",
+    "general": "Algo deu errado. Por favor, tente novamente mais tarde."
+  },
+  "notifications": {
+    "appointment": {
+      "success": "Solicitação de consulta enviada com sucesso!",
+      "failure": "Falha ao enviar solicitação de consulta"
+    },
+    "acceptAppointment": {
+      "success": "Consulta aceita com sucesso",
+      "failure": "Falha ao aceitar consulta"
+    },
+    "rejectAppointment": {
+      "success": "Consulta rejeitada com sucesso",
+      "failure": "Falha ao rejeitar consulta"
+    }
+  }
+}

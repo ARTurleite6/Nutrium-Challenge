@@ -9,6 +9,7 @@ import Button from "./Button";
 import Modal from "./Modal";
 import { createAppointment } from "../api/appointments";
 import { useNotification } from "../context/useNotification";
+import { useTranslation } from "react-i18next";
 
 interface AppointmentModalProps {
   isOpen: boolean;
@@ -45,6 +46,8 @@ const AppointmentModal: React.FC<AppointmentModalProps> = ({
   const { showNotification } = useNotification();
   const [submitSuccess, setSubmitSuccess] = useState(false);
 
+  const { t } = useTranslation();
+
   const resetForm = (): void => {
     setAppointmentForm({
       guest_attributes: { name: "", email: "" },
@@ -76,30 +79,25 @@ const AppointmentModal: React.FC<AppointmentModalProps> = ({
       });
 
       setSubmitSuccess(true);
-      showNotification(
-        "Appointment request submitted successfully!",
-        "success",
-      );
+      showNotification(t("notifications.appointment.success"), "success");
       setTimeout(() => {
         handleClose();
       }, 2000);
     } catch (error: unknown) {
       if (
+        error &&
         typeof error === "object" &&
-        error !== null &&
-        "data" in error &&
-        typeof error.data === "object" &&
-        error.data !== null &&
-        "errors" in error.data
+        "response" in error &&
+        error.response &&
+        typeof error.response === "object" &&
+        "data" in error.response &&
+        typeof error.response.data === "object" &&
+        error.response.data &&
+        "errors" in error.response.data
       ) {
-        setErrors(error.data.errors as FormErrors);
+        setErrors(error.response.data.errors as FormErrors);
       } else {
-        setErrors({
-          general: [
-            "Network error. Please check your connection and try again.",
-          ],
-        });
-        showNotification("Failed to submit appointment request", "error");
+        setErrors({ general: [t("errors.general")] });
       }
     } finally {
       setIsSubmitting(false);
@@ -115,7 +113,7 @@ const AppointmentModal: React.FC<AppointmentModalProps> = ({
           <div className="p-8">
             <div className="flex items-center justify-between mb-6">
               <h2 className="text-2xl font-semibold text-gray-900">
-                Schedule Appointment
+                {t("appointmentModal.title")}
               </h2>
               <button
                 onClick={handleClose}
@@ -129,10 +127,10 @@ const AppointmentModal: React.FC<AppointmentModalProps> = ({
             {submitSuccess && (
               <div className="mb-6 p-4 bg-green-50 border border-green-200 rounded-lg">
                 <p className="text-green-800 font-medium">
-                  ✅ Appointment request submitted successfully!
+                  {t("appointmentModal.success.title")}
                 </p>
                 <p className="text-green-700 text-sm mt-1">
-                  You will receive a confirmation email shortly.
+                  {t("appointmentModal.success.message")}
                 </p>
               </div>
             )}
@@ -162,7 +160,7 @@ const AppointmentModal: React.FC<AppointmentModalProps> = ({
 
             <div className="space-y-6">
               <Input
-                label="Full Name"
+                label={t("appointmentModal.form.fullName")}
                 type="text"
                 value={appointmentForm.guest_attributes.name}
                 onChange={(e) => {
@@ -181,7 +179,7 @@ const AppointmentModal: React.FC<AppointmentModalProps> = ({
                     },
                   }));
                 }}
-                placeholder="Your full name"
+                placeholder={t("appointmentModal.form.fullName")}
                 icon={<User className="w-5 h-5 text-gray-400" />}
                 iconPosition="left"
                 errors={errors.guest?.name}
@@ -189,7 +187,7 @@ const AppointmentModal: React.FC<AppointmentModalProps> = ({
               />
 
               <Input
-                label="Email Address"
+                label={t("appointmentModal.form.email")}
                 type="email"
                 value={appointmentForm.guest_attributes.email}
                 onChange={(e) => {
@@ -208,7 +206,7 @@ const AppointmentModal: React.FC<AppointmentModalProps> = ({
                     },
                   }));
                 }}
-                placeholder="your.email@example.com"
+                placeholder={t("appointmentModal.form.email_placeholder")}
                 icon={<Mail className="w-5 h-5 text-gray-400" />}
                 iconPosition="left"
                 errors={errors.guest?.email}
@@ -216,7 +214,7 @@ const AppointmentModal: React.FC<AppointmentModalProps> = ({
               />
 
               <Input
-                label="Preferred Date"
+                label={t("appointmentModal.form.date")}
                 type="date"
                 value={appointmentForm.event_date}
                 onChange={(e) => {
@@ -237,7 +235,7 @@ const AppointmentModal: React.FC<AppointmentModalProps> = ({
               />
 
               <Input
-                label="Preferred Time"
+                label={t("appointmentModal.form.time")}
                 type="time"
                 value={timeInput}
                 onChange={(e) => {
@@ -259,14 +257,16 @@ const AppointmentModal: React.FC<AppointmentModalProps> = ({
                   variant="orange"
                   disabled={isSubmitting}
                 >
-                  Cancel
+                  {t("appointmentModal.buttons.cancel")}
                 </Button>
                 <Button
                   onClick={submitAppointment}
                   variant="green"
                   disabled={isSubmitting}
                 >
-                  {isSubmitting ? "Submitting..." : "Request Appointment"}
+                  {isSubmitting
+                    ? t("appointmentModal.buttons.submitting")
+                    : t("appointmentModal.buttons.submit")}
                 </Button>
               </div>
             </div>

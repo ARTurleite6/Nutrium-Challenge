@@ -1,0 +1,88 @@
+{
+  "app": {
+    "title": "Nutrium"
+  },
+  "navbar": {
+    "cta": "Êtes-vous un professionnel de la nutrition ? Découvrez notre logiciel"
+  },
+  "search": {
+    "placeholder": {
+      "search": "Nom, service, rendez-vous en ligne...",
+      "location": "Emplacement..."
+    },
+    "button": "Rechercher",
+    "noResults": {
+      "title": "Aucun nutritionniste trouvé",
+      "subtitle": "Essayez un terme de recherche différent ou parcourez tous les nutritionnistes disponibles."
+    },
+    "loading": "Chargement des nutritionnistes..."
+  },
+  "nutritionistCard": {
+    "follow-up": "SUIVI",
+    "website": "Site web",
+    "schedule": "Prendre rendez-vous",
+    "delivery": {
+      "in_person": "En personne",
+      "online": "En ligne"
+    }
+  },
+  "appointmentModal": {
+    "title": "Prendre Rendez-vous",
+    "success": {
+      "title": "✅ Demande de rendez-vous soumise avec succès !",
+      "message": "Vous recevrez un email de confirmation sous peu."
+    },
+    "form": {
+      "fullName": "Nom Complet",
+      "fullName_placeholder": "Votre nom complet",
+      "email": "Adresse Email",
+      "email_placeholder": "votre.email@exemple.com",
+      "date": "Date Préférée",
+      "time": "Heure Préférée"
+    },
+    "buttons": {
+      "cancel": "Annuler",
+      "submit": "Demander un Rendez-vous",
+      "submitting": "Envoi en cours..."
+    }
+  },
+  "pendingAppointments": {
+    "title": "Demandes en Attente",
+    "subtitle": "Accepter ou refuser les nouvelles demandes en attente",
+    "answerRequest": "Répondre à la demande",
+    "actions": {
+      "accept": "Accepter",
+      "decline": "Refuser"
+    },
+    "noRequest": "Aucune demande à afficher.",
+    "page": "Page {{current}} sur {{total}}",
+    "loading": "Chargement..."
+  },
+  "pagination": {
+    "previous": "Page précédente",
+    "next": "Page suivante"
+  },
+  "language": {
+    "en": "Anglais",
+    "pt": "Portugais",
+    "fr": "Français"
+  },
+  "errors": {
+    "network": "Erreur réseau. Veuillez vérifier votre connexion et réessayer.",
+    "general": "Une erreur s'est produite. Veuillez réessayer plus tard."
+  },
+  "notifications": {
+    "appointment": {
+      "success": "Demande de rendez-vous soumise avec succès !",
+      "failure": "Échec de la soumission de la demande de rendez-vous"
+    },
+    "acceptAppointment": {
+      "success": "Rendez-vous accepté avec succès",
+      "failure": "Échec de l'acceptation du rendez-vous"
+    },
+    "rejectAppointment": {
+      "success": "Rendez-vous refusé avec succès",
+      "failure": "Échec du refus du rendez-vous"
+    }
+  }
+}

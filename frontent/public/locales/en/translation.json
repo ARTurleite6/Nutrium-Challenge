@@ -1,0 +1,90 @@
+{
+  "app": {
+    "title": "Nutrium"
+  },
+  "navbar": {
+    "cta": "Are you a nutrition professional? Get to know our software"
+  },
+  "search": {
+    "placeholder": {
+      "search": "Name, service, online appointment...",
+      "location": "Location..."
+    },
+    "button": "Search",
+    "noResults": {
+      "title": "No nutritionists found",
+      "subtitle": "Try a different search term or browse all available nutritionists."
+    },
+    "loading": "Loading nutritionists..."
+  },
+  "nutritionistCard": {
+    "follow-up": "FOLLOW-UP",
+    "website": "Website",
+    "schedule": "Schedule appointment",
+    "delivery": {
+      "follow_up": {
+        "in_person": "In Person follow-up",
+        "online": "Online follow-up"
+      }
+    }
+  },
+  "appointmentModal": {
+    "title": "Schedule Appointment",
+    "success": {
+      "title": "✅ Appointment request submitted successfully!",
+      "message": "You will receive a confirmation email shortly."
+    },
+    "form": {
+      "fullName": "Full Name",
+      "fullName_placeholder": "Your full name",
+      "email": "Email Address",
+      "email_placeholder": "your.email@example.com",
+      "date": "Preferred Date",
+      "time": "Preferred Time"
+    },
+    "buttons": {
+      "cancel": "Cancel",
+      "submit": "Request Appointment",
+      "submitting": "Submitting..."
+    }
+  },
+  "pendingAppointments": {
+    "title": "Pending Requests",
+    "subtitle": "Accept or reject new pending requests",
+    "answerRequest": "Answer request",
+    "actions": {
+      "accept": "Accept",
+      "decline": "Decline"
+    },
+    "noRequest": "No request to display.",
+    "page": "Page {{current}} of {{total}}",
+    "loading": "Loading..."
+  },
+  "pagination": {
+    "previous": "Previous page",
+    "next": "Next page"
+  },
+  "language": {
+    "en": "English",
+    "pt": "Portuguese",
+    "fr": "French"
+  },
+  "errors": {
+    "network": "Network error. Please check your connection and try again.",
+    "general": "Something went wrong. Please try again later."
+  },
+  "notifications": {
+    "appointment": {
+      "success": "Appointment request submitted successfully!",
+      "failure": "Failed to submit appointment request"
+    },
+    "acceptAppointment": {
+      "success": "Appointment accepted successfully",
+      "failure": "Failed to accept appointment"
+    },
+    "rejectAppointment": {
+      "success": "Appointment rejected successfully",
+      "failure": "Failed to reject appointment"
+    }
+  }
+}

@@ -12,6 +12,7 @@ import {
   rejectAppointment,
 } from "../api/appointments";
 import Pagination from "./Pagination";
+import { useTranslation } from "react-i18next";
 
 const PendingAppointments: React.FC = () => {
   const { id } = useParams();
@@ -28,6 +29,7 @@ const PendingAppointments: React.FC = () => {
   );
   const [loading, setLoading] = useState(false);
   const { showNotification } = useNotification();
+  const { t } = useTranslation();
 
   const refreshAppointments = useCallback(async () => {
     if (!id) return;
@@ -68,10 +70,10 @@ const PendingAppointments: React.FC = () => {
       await acceptAppointment(appointmentId);
       setIsModalOpen(false);
       setUpdateTrigger((prev) => prev + 1);
-      showNotification("Appointment accepted successfully", "success");
+      showNotification(t("notifications.acceptAppointment.success"), "success");
     } catch (error) {
       console.error("Error accepting appointment:", error);
-      showNotification("Failed to accept appointment", "error");
+      showNotification(t("notifications.acceptAppointment.failure"), "error");
     }
   };
 
@@ -81,10 +83,10 @@ const PendingAppointments: React.FC = () => {
       await rejectAppointment(appointmentId);
       setIsModalOpen(false);
       setUpdateTrigger((prev) => prev + 1);
-      showNotification("Appointment rejected successfully", "success");
+      showNotification(t("notifications.rejectAppointment.success"), "success");
     } catch (error) {
       console.error("Error rejecting appointment:", error);
-      showNotification("Failed to reject appointment", "error");
+      showNotification(t("notifications.rejectAppointment.failure"), "error");
     }
   };
 
@@ -95,10 +97,10 @@ const PendingAppointments: React.FC = () => {
           <div className="flex items-center justify-between mb-6">
             <div>
               <h2 className="text-lg font-medium text-gray-800 mb-1">
-                Pending Requests
+                {t("pendingAppointments.title")}
               </h2>
               <p className="text-sm text-gray-500">
-                Accept or reject new pending requests
+                {t("pendingAppointments.subtitle")}
               </p>
             </div>
           </div>
@@ -126,7 +128,12 @@ const PendingAppointments: React.FC = () => {
           )}
 
           <div className="text-center mt-4 text-sm text-gray-500">
-            {loading ? "Loading..." : `Page ${currentPage} of ${totalPages}`}
+            {loading
+              ? t("pendingAppointments.loading")
+              : t("pendingAppointments.page", {
+                  current: currentPage,
+                  total: totalPages,
+                })}
           </div>
         </div>
       </div>

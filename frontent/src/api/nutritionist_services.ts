@@ -1,5 +1,6 @@
 import type { GroupedNutritionistService, PaginationData } from "../types";
 import apiClient from "./apiClient";
+import i18n from "../i18n";
 
 export type GetNutritionistServicesResponse = {
   nutritionists: GroupedNutritionistService[];
@@ -30,6 +31,8 @@ export async function getNutritionistServices(
   if (perPage) {
     queryParams.push(`per_page=${perPage}`);
   }
+
+  queryParams.push(`locale=${i18n.language}`);
 
   if (queryParams.length > 0) {
     url += `?${queryParams.join("&")}`;

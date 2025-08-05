@@ -1,6 +1,7 @@
 import React from "react";
 import Modal from "./Modal";
 import type { Appointment } from "../types";
+import { useTranslation } from "react-i18next";
 
 interface PendingAppointmentModalProps {
   isOpen: boolean;
@@ -17,11 +18,16 @@ const PendingAppointmentModal: React.FC<PendingAppointmentModalProps> = ({
   onAccept,
   onDecline,
 }) => {
+  const { t } = useTranslation();
   if (!appointment) {
     return (
-      <Modal isOpen={isOpen} onClose={onClose} title="Pending Request">
+      <Modal
+        isOpen={isOpen}
+        onClose={onClose}
+        title={t("pendingAppointmentModal.title")}
+      >
         <div className="text-center py-6">
-          <p className="text-gray-500">No request to display.</p>
+          <p className="text-gray-500">{t("pendingAppointments.noRequest")}</p>
         </div>
       </Modal>
     );
@@ -30,7 +36,11 @@ const PendingAppointmentModal: React.FC<PendingAppointmentModalProps> = ({
   const formattedDate = new Date(appointment.event_date).toLocaleDateString();
 
   return (
-    <Modal isOpen={isOpen} onClose={onClose} title="Pending Request">
+    <Modal
+      isOpen={isOpen}
+      onClose={onClose}
+      title={t("pendingAppointmentModal.title")}
+    >
       <div className="w-full">
         <div className="mb-4">
           <div className="flex justify-between items-start">
@@ -47,15 +57,16 @@ const PendingAppointmentModal: React.FC<PendingAppointmentModalProps> = ({
 
           <div className="my-4 bg-gray-50 p-4 rounded-lg">
             <p className="text-gray-700">
-              Service Location:{" "}
+              {t("pendingAppointmentModal.serviceLocation")}:{" "}
               {appointment.nutritionist_service.location.full_address}
             </p>
             <p className="text-gray-700">
-              Nutritionist:{" "}
+              {t("pendingAppointmentModal.nutritionist")}:{" "}
               {appointment.nutritionist_service.nutritionist?.name}
             </p>
             <p className="text-gray-700">
-              Price: €{appointment.nutritionist_service.pricing}
+              {t("pendingAppointmentModal.price")}: €
+              {appointment.nutritionist_service.pricing}
             </p>
           </div>
 
@@ -64,13 +75,13 @@ const PendingAppointmentModal: React.FC<PendingAppointmentModalProps> = ({
               className="bg-red-500 hover:bg-red-600 text-white py-2 px-4 rounded-md text-sm font-medium transition duration-150 ease-in-out"
               onClick={() => onDecline(appointment.id)}
             >
-              Decline
+              {t("pendingAppointments.actions.decline")}
             </button>
             <button
               className="bg-green-500 hover:bg-green-600 text-white py-2 px-4 rounded-md text-sm font-medium transition duration-150 ease-in-out"
               onClick={() => onAccept(appointment.id)}
             >
-              Accept
+              {t("pendingAppointments.actions.accept")}
             </button>
           </div>
         </div>

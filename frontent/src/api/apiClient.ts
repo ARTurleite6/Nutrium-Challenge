@@ -1,7 +1,7 @@
 import { API_URL, DEFAULT_HEADERS } from "./config";
-import redaxios from "redaxios";
+import axios from "axios";
 
-const apiClient = redaxios.create({
+const apiClient = axios.create({
   baseURL: API_URL,
   headers: DEFAULT_HEADERS,
 });

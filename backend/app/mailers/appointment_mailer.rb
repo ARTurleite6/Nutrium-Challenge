@@ -12,7 +12,7 @@ class AppointmentMailer < ApplicationMailer
 
     mail(
       to: @guest.email,
-      subject: "✅ Your appointment with #{@nutritionist.name} has been accepted"
+      subject: I18n.t('emails.appointment_mailer.appointment_accepted.subject', nutritionist_name: @nutritionist.name)
     )
   end
 
@@ -24,7 +24,7 @@ class AppointmentMailer < ApplicationMailer
 
     mail(
       to: @guest.email,
-      subject: "📅 Your appointment request with #{@nutritionist.name}"
+      subject: I18n.t('emails.appointment_mailer.appointment_rejected.subject', nutritionist_name: @nutritionist.name)
     )
   end
 
@@ -37,7 +37,9 @@ class AppointmentMailer < ApplicationMailer
 
     mail(
       to: @guest.email,
-      subject: "🔔 Appointment Confirmation - #{@service.name} with #{@nutritionist.name}"
+      subject: I18n.t('emails.appointment_mailer.appointment_confirmation.subject',
+                      service_name: @service.name,
+                      nutritionist_name: @nutritionist.name)
     )
   end
 end

@@ -132,79 +132,78 @@
   <body>
     <div class="email-container">
       <div class="header">
-        <h1>📅 Appointment Request Update</h1>
-        <p>We have an update regarding your appointment request</p>
+        <h1>📅 <%= t('emails.appointment_mailer.appointment_rejected.appointment_request_update') %></h1>
+        <p><%= t('emails.appointment_mailer.appointment_rejected.update_message') %></p>
       </div>
-      
+
       <div class="content">
-        <p>Hello <%= @guest.name %>,</p>
-        
-        <p>Thank you for your interest in scheduling an appointment with <strong><%= @nutritionist.name %></strong>. Unfortunately, they are unable to accommodate your requested time slot.</p>
-        
+        <p><%= t('emails.appointment_mailer.appointment_rejected.greeting', guest_name: @guest.name) %></p>
+
+        <p><%= t('emails.appointment_mailer.appointment_rejected.message', nutritionist_name: @nutritionist.name).html_safe %></p>
+
         <div class="status-card">
-          <h3 style="margin: 0 0 10px 0; color: #856404;">⚠️ Request Not Available</h3>
-          <p style="margin: 0; color: #856404;">Your requested appointment time is not available, but we have alternatives!</p>
+          <h3 style="margin: 0 0 10px 0; color: #856404;">⚠️ <%= t('emails.appointment_mailer.appointment_rejected.request_not_available') %></h3>
+          <p style="margin: 0; color: #856404;"><%= t('emails.appointment_mailer.appointment_rejected.alternative_message') %></p>
         </div>
-        
+
         <div class="appointment-card">
-          <h3 style="margin: 0 0 15px 0; color: #333;">📋 Your Original Request</h3>
-          
+          <h3 style="margin: 0 0 15px 0; color: #333;">📋 <%= t('emails.appointment_mailer.appointment_rejected.original_request') %></h3>
+
           <div class="detail-row">
             <span class="detail-icon">👩‍⚕️</span>
-            <span class="detail-label">Nutritionist:</span>
+            <span class="detail-label"><%= t('emails.appointment_mailer.appointment_rejected.nutritionist') %>:</span>
             <span class="detail-value"><%= @nutritionist.name %></span>
           </div>
-          
+
           <div class="detail-row">
             <span class="detail-icon">🩺</span>
-            <span class="detail-label">Service:</span>
+            <span class="detail-label"><%= t('emails.appointment_mailer.appointment_rejected.service') %>:</span>
             <span class="detail-value"><%= @service.name %></span>
           </div>
-          
+
           <div class="detail-row">
             <span class="detail-icon">📅</span>
-            <span class="detail-label">Requested Date:</span>
+            <span class="detail-label"><%= t('emails.appointment_mailer.appointment_rejected.requested_date') %>:</span>
             <span class="detail-value"><%= @appointment.event_date.strftime("%A, %B %d, %Y at %I:%M %p") %></span>
           </div>
-          
+
           <div class="detail-row">
             <span class="detail-icon">💰</span>
-            <span class="detail-label">Investment:</span>
+            <span class="detail-label"><%= t('emails.appointment_mailer.appointment_rejected.investment') %>:</span>
             <span class="detail-value">€<%= sprintf('%.2f', @appointment.nutritionist_service.pricing) %></span>
           </div>
         </div>
-        
+
         <div class="suggestions-box">
-          <h4>🔍 What You Can Do Next</h4>
+          <h4>🔍 <%= t('emails.appointment_mailer.appointment_rejected.what_next') %></h4>
           <ul class="suggestions-list">
-            <li><strong>Try a different time:</strong> Consider requesting a different date or time slot with the same nutritionist</li>
-            <li><strong>Browse other nutritionists:</strong> Explore our other qualified professionals who offer the same service</li>
-            <li><strong>Join the waitlist:</strong> We can notify you if this time slot becomes available</li>
-            <li><strong>Get recommendations:</strong> Our team can suggest the best available alternatives for your needs</li>
+            <% t('emails.appointment_mailer.appointment_rejected.next_steps').each do |step| %>
+              <li><%= step.html_safe %></li>
+            <% end %>
           </ul>
         </div>
-        
+
         <div class="cta-section">
-          <h4 style="margin: 0 0 15px 0; color: #333;">🚀 Ready to Find Your Perfect Appointment?</h4>
-          <p style="margin: 15px 0; color: #666;">Don't let this stop you from achieving your health goals!</p>
-          
-          <a href="#" class="btn">Browse Available Times</a>
-          <a href="#" class="btn btn-secondary">Find Other Nutritionists</a>
+          <h4 style="margin: 0 0 15px 0; color: #333;">🚀 <%= t('emails.appointment_mailer.appointment_rejected.find_perfect_appointment') %></h4>
+          <p style="margin: 15px 0; color: #666;"><%= t('emails.appointment_mailer.appointment_rejected.dont_stop') %></p>
+
+          <a href="#" class="btn"><%= t('emails.appointment_mailer.appointment_rejected.browse_times') %></a>
+          <a href="#" class="btn btn-secondary"><%= t('emails.appointment_mailer.appointment_rejected.find_others') %></a>
         </div>
-        
-        <p><strong>Remember:</strong> You can submit a new appointment request at any time. Each new request will cancel any previous pending requests, so you'll always have the most up-to-date booking in our system.</p>
-        
-        <p>We understand this might be disappointing, but we're committed to helping you find the perfect nutritionist match. Our team is here to support you every step of the way.</p>
-        
-        <p>Thank you for choosing Nutrium for your nutrition journey!</p>
-        
-        <p>Best regards,<br>
-        <strong>The Nutrium Team</strong></p>
+
+        <p><strong><%= t('emails.appointment_mailer.appointment_rejected.remember') %></strong> <%= t('emails.appointment_mailer.appointment_rejected.new_request_info') %></p>
+
+        <p><%= t('emails.appointment_mailer.appointment_rejected.closing') %></p>
+
+        <p><%= t('emails.appointment_mailer.appointment_rejected.thank_you') %></p>
+
+        <p><%= t('emails.appointment_mailer.appointment_rejected.signature') %><br>
+        <strong><%= t('emails.appointment_mailer.appointment_rejected.team') %></strong></p>
       </div>
-      
+
       <div class="footer">
-        <p>Request processed on <%= @appointment.updated_at.strftime("%B %d, %Y at %I:%M %p") %></p>
-        <p style="color: #999; font-size: 12px;">Nutrium - Your Nutrition Partner</p>
+        <p><%= t('emails.appointment_mailer.appointment_rejected.footer_processed', date_time: @appointment.updated_at.strftime("%B %d, %Y at %I:%M %p")) %></p>
+        <p style="color: #999; font-size: 12px;"><%= t('emails.appointment_mailer.appointment_rejected.footer_company') %></p>
       </div>
     </div>
   </body>

@@ -10,6 +10,7 @@ Rails.application.routes.draw do
 
   # Defines the root path route ("/")
   # root "posts#index"
+  get '/locales', to: 'application#locales'
   resources :nutritionist_services, as: :nutritionists, only: :index
 
   resources :appointments, only: :create do

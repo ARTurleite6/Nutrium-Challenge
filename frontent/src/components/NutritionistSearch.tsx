@@ -9,6 +9,7 @@ import Search from "./Search";
 import AppointmentModal from "./AppointmentModal";
 import { getNutritionistServices } from "../api/nutritionist_services";
 import Pagination from "./Pagination";
+import { useTranslation } from "react-i18next";
 
 type SearchParams = {
   searchTerm: string;
@@ -30,6 +31,8 @@ const NutritionistSearch: React.FC = () => {
   const [searchParams, setSearchParams] = useState<SearchParams | undefined>(
     undefined,
   );
+
+  const { t } = useTranslation();
 
   const fetchNutritionists = useCallback(
     async (params?: SearchParams): Promise<void> => {
@@ -96,9 +99,7 @@ const NutritionistSearch: React.FC = () => {
         {loading ? (
           <div className="text-center py-16">
             <div className="animate-spin rounded-full h-16 w-16 border-b-4 border-green-500 mx-auto"></div>
-            <p className="mt-6 text-lg text-gray-600">
-              Loading nutritionists...
-            </p>
+            <p className="mt-6 text-lg text-gray-600">{t("search.loading")}</p>
           </div>
         ) : nutritionistServices.length > 0 ? (
           <div className="space-y-8">
@@ -114,11 +115,9 @@ const NutritionistSearch: React.FC = () => {
           <div className="text-center py-16">
             <div className="text-6xl mb-6">🔍</div>
             <h3 className="text-xl font-medium text-gray-700 mb-2">
-              No nutritionists found
+              {t("search.noResults.title")}
             </h3>
-            <p className="text-gray-600">
-              Try a different search term or browse all available nutritionists.
-            </p>
+            <p className="text-gray-600">{t("search.noResults.subtitle")}</p>
           </div>
         )}
 

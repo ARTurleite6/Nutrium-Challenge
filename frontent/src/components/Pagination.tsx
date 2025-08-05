@@ -1,5 +1,6 @@
 import React from "react";
 import { ChevronLeft, ChevronRight } from "lucide-react";
+import { useTranslation } from "react-i18next";
 
 interface PaginationProps {
   currentPage: number;
@@ -14,6 +15,8 @@ const Pagination: React.FC<PaginationProps> = ({
   onPageChange,
   disabled = false,
 }) => {
+  const { t } = useTranslation();
+
   const getPageNumbers = () => {
     const pageNumbers = [];
     const maxPagesToShow = 5;
@@ -68,7 +71,7 @@ const Pagination: React.FC<PaginationProps> = ({
             : "text-gray-600 hover:bg-gray-100"
         }`}
         disabled={disabled || currentPage === 1}
-        aria-label="Previous page"
+        aria-label={t("pagination.previous")}
       >
         <ChevronLeft className="w-5 h-5" />
       </button>
@@ -100,7 +103,7 @@ const Pagination: React.FC<PaginationProps> = ({
             : "text-gray-600 hover:bg-gray-100"
         }`}
         disabled={disabled || currentPage === totalPages}
-        aria-label="Next page"
+        aria-label={t("pagination.next")}
       >
         <ChevronRight className="w-5 h-5" />
       </button>

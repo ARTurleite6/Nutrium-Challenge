@@ -122,77 +122,75 @@
   <body>
     <div class="email-container">
       <div class="header">
-        <h1>🎉 Appointment Confirmed!</h1>
-        <p>Great news, <%= @guest.name %>! Your appointment has been accepted.</p>
+        <h1>🎉 <%= t('emails.appointment_mailer.appointment_accepted.appointment_confirmed') %></h1>
+        <p><%= t('emails.appointment_mailer.appointment_accepted.greeting', guest_name: @guest.name) %></p>
       </div>
-      
+
       <div class="content">
         <p>Hello <%= @guest.name %>,</p>
-        
-        <p>Excellent news! <strong><%= @nutritionist.name %></strong> has accepted your appointment request. We're excited to help you on your nutrition journey!</p>
-        
+
+        <p><%= t('emails.appointment_mailer.appointment_accepted.message', nutritionist_name: @nutritionist.name).html_safe %></p>
+
         <div class="appointment-card">
-          <h3 style="margin: 0 0 15px 0; color: #4CAF50;">📅 Appointment Details</h3>
-          
+          <h3 style="margin: 0 0 15px 0; color: #4CAF50;">📅 <%= t('emails.appointment_mailer.appointment_accepted.appointment_details') %></h3>
+
           <div class="detail-row">
             <span class="detail-icon">👩‍⚕️</span>
-            <span class="detail-label">Nutritionist:</span>
+            <span class="detail-label"><%= t('emails.appointment_mailer.appointment_accepted.nutritionist') %>:</span>
             <span class="detail-value"><%= @nutritionist.name %></span>
           </div>
-          
+
           <div class="detail-row">
             <span class="detail-icon">🩺</span>
-            <span class="detail-label">Service:</span>
+            <span class="detail-label"><%= t('emails.appointment_mailer.appointment_accepted.service') %>:</span>
             <span class="detail-value"><%= @service.name %></span>
           </div>
-          
+
           <div class="detail-row">
             <span class="detail-icon">📅</span>
-            <span class="detail-label">Date & Time:</span>
+            <span class="detail-label"><%= t('emails.appointment_mailer.appointment_accepted.date_time') %>:</span>
             <span class="detail-value"><%= @appointment.event_date.strftime("%A, %B %d, %Y at %I:%M %p") %></span>
           </div>
-          
+
           <div class="detail-row">
             <span class="detail-icon">📍</span>
-            <span class="detail-label">Location:</span>
+            <span class="detail-label"><%= t('emails.appointment_mailer.appointment_accepted.location') %>:</span>
             <span class="detail-value">
               <%= @location.full_address %><br>
               <small style="color: #666;"><%= @location.city %></small>
             </span>
           </div>
-          
+
           <div class="detail-row">
             <span class="detail-icon">💰</span>
-            <span class="detail-label">Investment:</span>
+            <span class="detail-label"><%= t('emails.appointment_mailer.appointment_accepted.investment') %>:</span>
             <span class="detail-value"><strong>€<%= sprintf('%.2f', @appointment.nutritionist_service.pricing) %></strong></span>
           </div>
         </div>
-        
+
         <div class="tips">
-          <h4>📋 Preparing for Your Appointment</h4>
+          <h4>📋 <%= t('emails.appointment_mailer.appointment_accepted.preparing_title') %></h4>
           <ul>
-            <li>Please arrive <strong>10 minutes early</strong> to complete any necessary paperwork</li>
-            <li>Bring any relevant medical records, lab results, or current medications list</li>
-            <li>Prepare a 3-day food diary if possible</li>
-            <li>Write down any specific questions or concerns you'd like to discuss</li>
-            <li>Wear comfortable clothing if body measurements will be taken</li>
+            <% t('emails.appointment_mailer.appointment_accepted.preparing_tips').each do |tip| %>
+              <li><%= tip.html_safe %></li>
+            <% end %>
           </ul>
         </div>
-        
+
         <div class="cta-section">
-          <p><strong>Need to make changes to your appointment?</strong></p>
-          <p style="margin: 15px 0; color: #666;">Contact your nutritionist directly if you need to reschedule or have any questions.</p>
+          <p><strong><%= t('emails.appointment_mailer.appointment_accepted.need_changes') %></strong></p>
+          <p style="margin: 15px 0; color: #666;"><%= t('emails.appointment_mailer.appointment_accepted.contact_message') %></p>
         </div>
-        
-        <p>We're looking forward to supporting you on your wellness journey. If you have any questions before your appointment, don't hesitate to reach out.</p>
-        
-        <p>Best regards,<br>
-        <strong>The Nutrium Team</strong></p>
+
+        <p><%= t('emails.appointment_mailer.appointment_accepted.closing') %></p>
+
+        <p><%= t('emails.appointment_mailer.appointment_accepted.signature') %><br>
+        <strong><%= t('emails.appointment_mailer.appointment_accepted.team') %></strong></p>
       </div>
-      
+
       <div class="footer">
-        <p>This email was sent regarding your appointment request on <%= Date.current.strftime("%B %d, %Y") %></p>
-        <p style="color: #999; font-size: 12px;">Nutrium - Your Nutrition Partner</p>
+        <p><%= t('emails.appointment_mailer.appointment_accepted.footer_sent', date: Date.current.strftime("%B %d, %Y")) %></p>
+        <p style="color: #999; font-size: 12px;"><%= t('emails.appointment_mailer.appointment_accepted.footer_company') %></p>
       </div>
     </div>
   </body>

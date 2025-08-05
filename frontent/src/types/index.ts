@@ -31,13 +31,9 @@ export interface Location {
   full_address: string;
 }
 
-export interface NutritionistServiceWithNutritionist {
-  id: string;
-  pricing: number;
-  service: Service;
+export interface NutritionistServiceWithNutritionist
+  extends NutritionistService {
   nutritionist: Nutritionist;
-  location: Location;
-  delivery_method: DeliveryMethod;
 }
 
 export interface NutritionistService {
@@ -46,6 +42,7 @@ export interface NutritionistService {
   service: Service;
   location: Location;
   delivery_method: DeliveryMethod;
+  delivery_method_translated: string;
 }
 
 export type DeliveryMethod = "in_person" | "online";

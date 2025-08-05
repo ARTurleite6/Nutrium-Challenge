@@ -1,12 +1,10 @@
 import { Calendar, ChevronDown, Euro, MapPin, Star } from "lucide-react";
-import type {
-  DeliveryMethod,
-  NutritionistServiceWithNutritionist,
-} from "../types";
+import type { NutritionistServiceWithNutritionist } from "../types";
 import Button from "./Button";
 import { useState, useRef, useEffect } from "react";
 import Avatar from "./Avatar";
 import type { GroupedNutritionistService } from "../types";
+import { useTranslation } from "react-i18next";
 
 type Props = {
   nutritionist_services: GroupedNutritionistService;
@@ -20,16 +18,13 @@ const NutritionistCard: React.FC<Props> = ({
   const [selectedServiceIndex, setSelectedServiceIndex] = useState(0);
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
   const dropdownRef = useRef<HTMLDivElement>(null);
+  const { t } = useTranslation();
 
   const selectedService: NutritionistServiceWithNutritionist = {
     ...nutritionist_services.services[selectedServiceIndex],
     nutritionist: nutritionist_services.nutritionist,
   };
   const nutritionist = nutritionist_services.nutritionist;
-  const deliveryMethodLabels: Record<DeliveryMethod, string> = {
-    in_person: "In Person",
-    online: "Online",
-  } as const;
 
   const handleServiceSelect = (index: number) => {
     setSelectedServiceIndex(index);
@@ -65,7 +60,7 @@ const NutritionistCard: React.FC<Props> = ({
               {
                 <div className="flex items-center space-x-1 bg-emerald-100 text-emerald-600 px-3 py-1 rounded-full text-sm font-medium">
                   <Star className="w-4 h-4" />
-                  <span>FOLLOW-UP</span>
+                  <span>{t("nutritionistCard.follow-up")}</span>
                 </div>
               }
             </div>
@@ -80,8 +75,9 @@ const NutritionistCard: React.FC<Props> = ({
               <MapPin className="w-4 h-4 text-emerald-500 flex-shrink-0 mt-1" />
               <div className="flex flex-col space-y-2">
                 <span className="font-medium text-emerald-500">
-                  {deliveryMethodLabels[selectedService.delivery_method]}
-                  {" Follow Up"}
+                  {t(
+                    `nutritionistCard.delivery.follow_up.${selectedService.delivery_method}`,
+                  )}
                 </span>
                 <div className="text-gray-600">
                   {selectedService.location.full_address}
@@ -99,7 +95,7 @@ const NutritionistCard: React.FC<Props> = ({
             onClick={() => onScheduleAppointment(selectedService)}
             variant="orange-light"
           >
-            Schedule appointment
+            {t("appointment.schedule")}
           </Button>
 
           <Button
@@ -109,7 +105,7 @@ const NutritionistCard: React.FC<Props> = ({
               console.log(`Opening website for ${nutritionist.name}`);
             }}
           >
-            Website
+            {t("appointment.website")}
           </Button>
 
           <div
@@ -130,9 +126,7 @@ const NutritionistCard: React.FC<Props> = ({
 
               <div className="flex items-center space-x-2 text-gray-600">
                 <Euro className="w-4 h-4 text-green-400" />
-                <span className="font-semibold">
-                  €{selectedService.pricing}
-                </span>
+                <span className="font-semibold">{selectedService.pricing}</span>
               </div>
             </button>
 
@@ -157,9 +151,7 @@ const NutritionistCard: React.FC<Props> = ({
                           </span>
                         </div>
                         <div className="flex items-center space-x-2 text-xs text-gray-500 ml-6">
-                          <span>
-                            {deliveryMethodLabels[service.delivery_method]}
-                          </span>
+                          <span>{service.delivery_method_translated}</span>
                           <span>•</span>
                           <span>{service.location.city}</span>
                         </div>

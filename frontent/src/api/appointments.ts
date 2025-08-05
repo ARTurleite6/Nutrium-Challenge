@@ -1,5 +1,6 @@
 import type { Appointment, AppointmentRequest, PaginationData } from "../types";
 import apiClient from "./apiClient";
+import i18n from "../i18n";
 
 export type GetAppointmentsResponse = {
   appointments: Appointment[];
@@ -34,7 +35,11 @@ export async function getPaginatedAppointments(
   page: number = 1,
   perPage: number = 10,
 ): Promise<GetAppointmentsResponse> {
-  const queryParams = [`page=${page}`, `per_page=${perPage}`];
+  const queryParams = [
+    `page=${page}`,
+    `per_page=${perPage}`,
+    `locale=${i18n.language}`,
+  ];
   const url = `/nutritionists/${nutritionistId}/appointments?${queryParams.join("&")}`;
 
   const response = await apiClient.get(url);
@@ -44,19 +49,28 @@ export async function getPaginatedAppointments(
 export async function createAppointment(
   appointment: AppointmentRequest,
 ): Promise<Response> {
-  const response = await apiClient.post("/appointments", {
-    appointment: appointment,
-  });
+  const response = await apiClient.post(
+    `/appointments?locale=${i18n.language}`,
+    {
+      appointment: appointment,
+    },
+  );
   return response.data;
 }
 
 export async function acceptAppointment(id: string): Promise<Response> {
-  const response = await apiClient.patch(`/appointments/${id}/accept`, {});
+  const response = await apiClient.patch(
+    `/appointments/${id}/accept?locale=${i18n.language}`,
+    {},
+  );
   return response.data;
 }
 
 // Decline an appointment
 export async function rejectAppointment(id: string): Promise<Response> {
-  const response = await apiClient.patch(`/appointments/${id}/reject`, {});
+  const response = await apiClient.patch(
+    `/appointments/${id}/reject?locale=${i18n.language}`,
+    {},
+  );
   return response.data;
 }

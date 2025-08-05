@@ -131,45 +131,45 @@
   <body>
     <div class="email-container">
       <div class="header">
-        <h1>🔔 Appointment Confirmation</h1>
-        <p>Your upcoming appointment with <%= @nutritionist.name %></p>
+        <h1>🔔 <%= t('emails.appointment_mailer.appointment_confirmation.appointment_confirmation') %></h1>
+        <p><%= t('emails.appointment_mailer.appointment_confirmation.upcoming_with', nutritionist_name: @nutritionist.name) %></p>
       </div>
 
       <div class="content">
-        <p>Hello <%= @guest.name %>,</p>
+        <p><%= t('emails.appointment_mailer.appointment_confirmation.greeting', guest_name: @guest.name) %></p>
 
-        <p>This is a friendly reminder about your upcoming appointment with <strong><%= @nutritionist.name %></strong>. We're looking forward to meeting you!</p>
+        <p><%= t('emails.appointment_mailer.appointment_confirmation.reminder_message', nutritionist_name: @nutritionist.name).html_safe %></p>
 
         <div class="appointment-card">
-          <h3 style="margin: 0 0 15px 0; color: #2563eb;">📅 Appointment Details</h3>
+          <h3 style="margin: 0 0 15px 0; color: #2563eb;">📅 <%= t('emails.appointment_mailer.appointment_confirmation.appointment_details') %></h3>
 
           <div class="detail-row">
             <span class="detail-icon">👩‍⚕️</span>
-            <span class="detail-label">Nutritionist:</span>
+            <span class="detail-label"><%= t('emails.appointment_mailer.appointment_confirmation.nutritionist') %>:</span>
             <span class="detail-value"><%= @nutritionist.name %></span>
           </div>
 
           <div class="detail-row">
             <span class="detail-icon">🩺</span>
-            <span class="detail-label">Service:</span>
+            <span class="detail-label"><%= t('emails.appointment_mailer.appointment_confirmation.service') %>:</span>
             <span class="detail-value"><%= @service.name %></span>
           </div>
 
           <div class="detail-row">
             <span class="detail-icon">📅</span>
-            <span class="detail-label">Date & Time:</span>
+            <span class="detail-label"><%= t('emails.appointment_mailer.appointment_confirmation.date_time') %>:</span>
             <span class="detail-value"><%= @appointment.event_date.strftime("%A, %B %d, %Y at %I:%M %p") %></span>
           </div>
 
           <div class="detail-row">
             <span class="detail-icon">⏱️</span>
-            <span class="detail-label">Duration:</span>
-            <span class="detail-value">60 minutes</span>
+            <span class="detail-label"><%= t('emails.appointment_mailer.appointment_confirmation.duration') %>:</span>
+            <span class="detail-value"><%= t('emails.appointment_mailer.appointment_confirmation.minutes') %></span>
           </div>
 
           <div class="detail-row">
             <span class="detail-icon">📍</span>
-            <span class="detail-label">Location:</span>
+            <span class="detail-label"><%= t('emails.appointment_mailer.appointment_confirmation.location') %>:</span>
             <span class="detail-value">
               <%= @location.full_address %><br>
               <small style="color: #666;"><%= @location.city %></small>
@@ -178,49 +178,47 @@
 
           <div class="detail-row">
             <span class="detail-icon">💰</span>
-            <span class="detail-label">Investment:</span>
+            <span class="detail-label"><%= t('emails.appointment_mailer.appointment_confirmation.investment') %>:</span>
             <span class="detail-value"><strong>€<%= sprintf('%.2f', @appointment.nutritionist_service.pricing) %></strong></span>
           </div>
         </div>
 
         <div class="what-to-bring">
-          <h4>🧳 What to Bring</h4>
+          <h4>🧳 <%= t('emails.appointment_mailer.appointment_confirmation.what_to_bring') %></h4>
           <ul>
-            <li>Any recent medical reports or test results related to your nutrition needs</li>
-            <li>A list of medications and supplements you're currently taking</li>
-            <li>Your food journal (if you've been keeping one)</li>
-            <li>Any questions you have about your nutrition goals</li>
-            <li>A form of payment (credit card, cash, or insurance information)</li>
+            <% t('emails.appointment_mailer.appointment_confirmation.bring_items').each do |item| %>
+              <li><%= item.html_safe %></li>
+            <% end %>
           </ul>
         </div>
 
-        <p><strong>Need to cancel or reschedule?</strong><br>
-        If you need to change your appointment, please contact us at least 24 hours in advance to avoid any cancellation fees.</p>
+        <p><strong><%= t('emails.appointment_mailer.appointment_confirmation.cancel_reschedule') %></strong><br>
+        <%= t('emails.appointment_mailer.appointment_confirmation.cancel_policy') %></p>
 
         <div class="calendar-section">
-          <p><strong>Add to your calendar to make sure you don't forget!</strong></p>
-          <p style="margin-bottom: 20px;">Click one of the buttons below to add this appointment to your calendar:</p>
-          <a href="#" class="btn">Google Calendar</a>
-          <a href="#" class="btn btn-secondary">iCal/Outlook</a>
+          <p><strong><%= t('emails.appointment_mailer.appointment_confirmation.calendar_reminder') %></strong></p>
+          <p style="margin-bottom: 20px;"><%= t('emails.appointment_mailer.appointment_confirmation.calendar_message') %></p>
+          <a href="#" class="btn"><%= t('emails.appointment_mailer.appointment_confirmation.google_calendar') %></a>
+          <a href="#" class="btn btn-secondary"><%= t('emails.appointment_mailer.appointment_confirmation.ical_outlook') %></a>
         </div>
 
         <div class="qr-code">
-          <p><strong>For quick check-in</strong></p>
-          <p>Show this QR code when you arrive:</p>
+          <p><strong><%= t('emails.appointment_mailer.appointment_confirmation.quick_checkin') %></strong></p>
+          <p><%= t('emails.appointment_mailer.appointment_confirmation.qr_message') %></p>
           <img src="https://api.qrserver.com/v1/create-qr-code/?size=150x150&data=AppointmentID:<%= @appointment.id %>" alt="Appointment QR Code">
         </div>
 
-        <p>If you have any questions before your appointment, feel free to contact us. We're here to help make your experience as smooth as possible.</p>
+        <p><%= t('emails.appointment_mailer.appointment_confirmation.contact_questions') %></p>
 
-        <p>We look forward to seeing you soon!</p>
+        <p><%= t('emails.appointment_mailer.appointment_confirmation.looking_forward') %></p>
 
-        <p>Best regards,<br>
-        <strong>The Nutrium Team</strong></p>
+        <p><%= t('emails.appointment_mailer.appointment_confirmation.signature') %><br>
+        <strong><%= t('emails.appointment_mailer.appointment_confirmation.team') %></strong></p>
       </div>
 
       <div class="footer">
-        <p>This email was sent on <%= Date.current.strftime("%B %d, %Y") %></p>
-        <p style="color: #999; font-size: 12px;">Nutrium - Your Nutrition Partner</p>
+        <p><%= t('emails.appointment_mailer.appointment_confirmation.footer_sent', date: Date.current.strftime("%B %d, %Y")) %></p>
+        <p style="color: #999; font-size: 12px;"><%= t('emails.appointment_mailer.appointment_confirmation.footer_company') %></p>
       </div>
     </div>
   </body>

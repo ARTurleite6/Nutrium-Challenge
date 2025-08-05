@@ -1,0 +1,169 @@
+fr:
+  # Models
+  activerecord:
+    models:
+      appointment: "Rendez-vous"
+      guest: "Invité"
+      location: "Lieu"
+      nutritionist: "Nutritionniste"
+      nutritionist_service: "Service de Nutritionniste"
+      service: "Service"
+    attributes:
+      appointment:
+        state: "État"
+        event_date: "Date du Rendez-vous"
+        guest: "Invité"
+        nutritionist_service: "Service de Nutritionniste"
+      guest:
+        name: "Nom"
+        email: "Email"
+      location:
+        full_address: "Adresse Complète"
+        city: "Ville"
+        coordinates: "Coordonnées"
+      nutritionist:
+        name: "Nom"
+        title: "Titre"
+        license_number: "Numéro de Licence"
+      nutritionist_service:
+        pricing: "Prix"
+        delivery_method: "Méthode de Prestation"
+      service:
+        name: "Nom"
+    errors:
+      models:
+        appointment:
+          attributes:
+            event_date:
+              past: "ne peut pas être dans le passé"
+              blank: "doit être fournie"
+        guest:
+          attributes:
+            email:
+              invalid: "format est invalide"
+              blank: "doit être fourni"
+            name:
+              blank: "doit être fourni"
+
+  # Enums
+  enums:
+    appointment:
+      state:
+        pending: "En attente"
+        accepted: "Accepté"
+        rejected: "Refusé"
+    nutritionist_service:
+      delivery_method:
+        in_person: "En personne"
+        online: "En ligne"
+
+  # Emails
+  emails:
+    appointment_mailer:
+      appointment_accepted:
+        subject: "✅ Votre rendez-vous avec %{nutritionist_name} a été accepté"
+        appointment_confirmed: "Rendez-vous Confirmé !"
+        greeting: "Excellente nouvelle, %{guest_name} ! Votre rendez-vous a été accepté."
+        message: "Excellente nouvelle ! %{nutritionist_name} a accepté votre demande de rendez-vous. Nous sommes ravis de vous aider dans votre parcours nutritionnel !"
+        appointment_details: "Détails du Rendez-vous"
+        nutritionist: "Nutritionniste"
+        service: "Service"
+        date_time: "Date et Heure"
+        location: "Lieu"
+        investment: "Investissement"
+        preparing_title: "Préparation pour votre Rendez-vous"
+        preparing_tips:
+          - "Veuillez arriver 10 minutes en avance pour remplir les documents nécessaires"
+          - "Apportez tous les dossiers médicaux pertinents, résultats de laboratoire ou liste de médicaments actuels"
+          - "Préparez un journal alimentaire de 3 jours si possible"
+          - "Notez toutes les questions ou préoccupations spécifiques que vous souhaitez aborder"
+          - "Portez des vêtements confortables si des mesures corporelles doivent être prises"
+        need_changes: "Besoin de modifier votre rendez-vous ?"
+        contact_message: "Contactez directement votre nutritionniste si vous avez besoin de reprogrammer ou si vous avez des questions."
+        closing: "Nous nous réjouissons de vous accompagner dans votre parcours de bien-être. Si vous avez des questions avant votre rendez-vous, n'hésitez pas à nous contacter."
+        signature: "Cordialement,"
+        team: "L'Équipe Nutrium"
+        footer_sent: "Cet e-mail a été envoyé concernant votre demande de rendez-vous le %{date}"
+        footer_company: "Nutrium - Votre Partenaire Nutrition"
+
+      appointment_rejected:
+        subject: "📅 Votre demande de rendez-vous avec %{nutritionist_name}"
+        appointment_request_update: "Mise à jour de la Demande de Rendez-vous"
+        update_message: "Nous avons une mise à jour concernant votre demande de rendez-vous"
+        greeting: "Bonjour %{guest_name},"
+        message: "Merci pour votre intérêt à prendre rendez-vous avec %{nutritionist_name}. Malheureusement, ils ne peuvent pas vous accueillir dans le créneau horaire demandé."
+        request_not_available: "Demande Non Disponible"
+        alternative_message: "L'horaire de rendez-vous que vous avez demandé n'est pas disponible, mais nous avons des alternatives !"
+        original_request: "Votre Demande Initiale"
+        nutritionist: "Nutritionniste"
+        service: "Service"
+        requested_date: "Date Demandée"
+        investment: "Investissement"
+        what_next: "Que Faire Ensuite"
+        next_steps:
+          - "Essayez un horaire différent : Envisagez de demander une date ou un créneau horaire différent avec le même nutritionniste"
+          - "Parcourez d'autres nutritionnistes : Explorez nos autres professionnels qualifiés qui offrent le même service"
+          - "Rejoignez la liste d'attente : Nous pouvons vous informer si ce créneau horaire devient disponible"
+          - "Obtenez des recommandations : Notre équipe peut vous suggérer les meilleures alternatives disponibles pour vos besoins"
+        find_perfect_appointment: "Prêt à Trouver votre Rendez-vous Parfait ?"
+        dont_stop: "Ne laissez pas cela vous empêcher d'atteindre vos objectifs de santé !"
+        browse_times: "Parcourir les Horaires Disponibles"
+        find_others: "Trouver D'autres Nutritionnistes"
+        remember: "Rappel :"
+        new_request_info: "Vous pouvez soumettre une nouvelle demande de rendez-vous à tout moment. Chaque nouvelle demande annulera les demandes en attente précédentes, afin que vous ayez toujours la réservation la plus à jour dans notre système."
+        closing: "Nous comprenons que cela puisse être décevant, mais nous nous engageons à vous aider à trouver le nutritionniste qui vous convient parfaitement. Notre équipe est là pour vous soutenir à chaque étape."
+        thank_you: "Merci d'avoir choisi Nutrium pour votre parcours nutritionnel !"
+        signature: "Cordialement,"
+        team: "L'Équipe Nutrium"
+        footer_processed: "Demande traitée le %{date_time}"
+        footer_company: "Nutrium - Votre Partenaire Nutrition"
+
+      appointment_confirmation:
+        subject: "🔔 Confirmation de Rendez-vous - %{service_name} avec %{nutritionist_name}"
+        appointment_confirmation: "Confirmation de Rendez-vous"
+        upcoming_with: "Votre prochain rendez-vous avec %{nutritionist_name}"
+        greeting: "Bonjour %{guest_name},"
+        reminder_message: "Voici un rappel amical concernant votre prochain rendez-vous avec %{nutritionist_name}. Nous avons hâte de vous rencontrer !"
+        appointment_details: "Détails du Rendez-vous"
+        nutritionist: "Nutritionniste"
+        service: "Service"
+        date_time: "Date et Heure"
+        duration: "Durée"
+        minutes: "60 minutes"
+        location: "Lieu"
+        investment: "Investissement"
+        what_to_bring: "Quoi Apporter"
+        bring_items:
+          - "Tous rapports médicaux récents ou résultats de tests liés à vos besoins nutritionnels"
+          - "Une liste des médicaments et suppléments que vous prenez actuellement"
+          - "Votre journal alimentaire (si vous en tenez un)"
+          - "Toutes questions que vous avez concernant vos objectifs nutritionnels"
+          - "Un moyen de paiement (carte de crédit, espèces ou informations d'assurance)"
+        cancel_reschedule: "Besoin d'annuler ou de reprogrammer ?"
+        cancel_policy: "Si vous devez modifier votre rendez-vous, veuillez nous contacter au moins 24 heures à l'avance pour éviter des frais d'annulation."
+        calendar_reminder: "Ajoutez à votre calendrier pour ne pas oublier !"
+        calendar_message: "Cliquez sur l'un des boutons ci-dessous pour ajouter ce rendez-vous à votre calendrier :"
+        google_calendar: "Google Agenda"
+        ical_outlook: "iCal/Outlook"
+        quick_checkin: "Pour un enregistrement rapide"
+        qr_message: "Montrez ce code QR à votre arrivée :"
+        contact_questions: "Si vous avez des questions avant votre rendez-vous, n'hésitez pas à nous contacter. Nous sommes là pour rendre votre expérience aussi agréable que possible."
+        looking_forward: "Nous nous réjouissons de vous voir bientôt !"
+        signature: "Cordialement,"
+        team: "L'Équipe Nutrium"
+        footer_sent: "Cet e-mail a été envoyé le %{date}"
+        footer_company: "Nutrium - Votre Partenaire Nutrition"
+
+  # API responses
+  api:
+    appointments:
+      created: "Rendez-vous créé avec succès"
+      accepted: "Rendez-vous accepté avec succès"
+      rejected: "Rendez-vous refusé avec succès"
+      not_found: "Rendez-vous non trouvé"
+    nutritionist_services:
+      not_found: "Aucun service de nutritionniste trouvé"
+    errors:
+      general: "Une erreur s'est produite"
+      record_not_found: "Ressource non trouvée"
+      validation_error: "Erreur de validation"

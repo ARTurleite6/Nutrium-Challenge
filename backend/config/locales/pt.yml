@@ -1,0 +1,169 @@
+pt:
+  # Models
+  activerecord:
+    models:
+      appointment: "Consulta"
+      guest: "Convidado"
+      location: "Localização"
+      nutritionist: "Nutricionista"
+      nutritionist_service: "Serviço de Nutricionista"
+      service: "Serviço"
+    attributes:
+      appointment:
+        state: "Estado"
+        event_date: "Data da Consulta"
+        guest: "Convidado"
+        nutritionist_service: "Serviço de Nutricionista"
+      guest:
+        name: "Nome"
+        email: "Email"
+      location:
+        full_address: "Endereço Completo"
+        city: "Cidade"
+        coordinates: "Coordenadas"
+      nutritionist:
+        name: "Nome"
+        title: "Título"
+        license_number: "Número de Licença"
+      nutritionist_service:
+        pricing: "Preço"
+        delivery_method: "Método de Entrega"
+      service:
+        name: "Nome"
+    errors:
+      models:
+        appointment:
+          attributes:
+            event_date:
+              past: "não pode estar no passado"
+              blank: "deve ser fornecida"
+        guest:
+          attributes:
+            email:
+              invalid: "formato é inválido"
+              blank: "deve ser fornecido"
+            name:
+              blank: "deve ser fornecido"
+
+  # Enums
+  enums:
+    appointment:
+      state:
+        pending: "Pendente"
+        accepted: "Aceito"
+        rejected: "Recusado"
+    nutritionist_service:
+      delivery_method:
+        in_person: "Presencial"
+        online: "Online"
+
+  # Emails
+  emails:
+    appointment_mailer:
+      appointment_accepted:
+        subject: "✅ Sua consulta com %{nutritionist_name} foi aceita"
+        appointment_confirmed: "Consulta Confirmada!"
+        greeting: "Ótimas notícias, %{guest_name}! Sua consulta foi aceita."
+        message: "Excelentes notícias! %{nutritionist_name} aceitou sua solicitação de consulta. Estamos ansiosos para ajudá-lo em sua jornada nutricional!"
+        appointment_details: "Detalhes da Consulta"
+        nutritionist: "Nutricionista"
+        service: "Serviço"
+        date_time: "Data e Hora"
+        location: "Localização"
+        investment: "Investimento"
+        preparing_title: "Preparando-se para sua Consulta"
+        preparing_tips:
+          - "Por favor, chegue 10 minutos mais cedo para preencher qualquer documentação necessária"
+          - "Traga quaisquer registros médicos relevantes, resultados de exames ou lista de medicamentos atuais"
+          - "Prepare um diário alimentar de 3 dias, se possível"
+          - "Anote quaisquer perguntas ou preocupações específicas que gostaria de discutir"
+          - "Use roupas confortáveis se medidas corporais forem necessárias"
+        need_changes: "Precisa fazer alterações em sua consulta?"
+        contact_message: "Entre em contato diretamente com seu nutricionista se precisar remarcar ou tiver alguma dúvida."
+        closing: "Estamos ansiosos para apoiá-lo em sua jornada de bem-estar. Se tiver alguma dúvida antes da sua consulta, não hesite em entrar em contato."
+        signature: "Atenciosamente,"
+        team: "A Equipe Nutrium"
+        footer_sent: "Este email foi enviado referente à sua solicitação de consulta em %{date}"
+        footer_company: "Nutrium - Seu Parceiro de Nutrição"
+
+      appointment_rejected:
+        subject: "📅 Sua solicitação de consulta com %{nutritionist_name}"
+        appointment_request_update: "Atualização da Solicitação de Consulta"
+        update_message: "Temos uma atualização sobre sua solicitação de consulta"
+        greeting: "Olá %{guest_name},"
+        message: "Obrigado pelo seu interesse em agendar uma consulta com %{nutritionist_name}. Infelizmente, eles não conseguem acomodar seu horário solicitado."
+        request_not_available: "Horário Solicitado Indisponível"
+        alternative_message: "O horário da consulta solicitado não está disponível, mas temos alternativas!"
+        original_request: "Sua Solicitação Original"
+        nutritionist: "Nutricionista"
+        service: "Serviço"
+        requested_date: "Data Solicitada"
+        investment: "Investimento"
+        what_next: "O Que Fazer a Seguir"
+        next_steps:
+          - "Tente um horário diferente: Considere solicitar uma data ou horário diferente com o mesmo nutricionista"
+          - "Navegue por outros nutricionistas: Explore outros profissionais qualificados que oferecem o mesmo serviço"
+          - "Entre na lista de espera: Podemos notificá-lo se este horário ficar disponível"
+          - "Obtenha recomendações: Nossa equipe pode sugerir as melhores alternativas disponíveis para suas necessidades"
+        find_perfect_appointment: "Pronto para Encontrar sua Consulta Perfeita?"
+        dont_stop: "Não deixe que isso impeça você de alcançar seus objetivos de saúde!"
+        browse_times: "Navegar por Horários Disponíveis"
+        find_others: "Encontrar Outros Nutricionistas"
+        remember: "Lembre-se:"
+        new_request_info: "Você pode enviar uma nova solicitação de consulta a qualquer momento. Cada nova solicitação cancelará quaisquer solicitações pendentes anteriores, então você sempre terá a reserva mais atualizada em nosso sistema."
+        closing: "Entendemos que isso pode ser decepcionante, mas estamos comprometidos em ajudá-lo a encontrar o nutricionista perfeito. Nossa equipe está aqui para apoiá-lo em cada passo do caminho."
+        thank_you: "Obrigado por escolher o Nutrium para sua jornada nutricional!"
+        signature: "Atenciosamente,"
+        team: "A Equipe Nutrium"
+        footer_processed: "Solicitação processada em %{date_time}"
+        footer_company: "Nutrium - Seu Parceiro de Nutrição"
+
+      appointment_confirmation:
+        subject: "🔔 Confirmação de Consulta - %{service_name} com %{nutritionist_name}"
+        appointment_confirmation: "Confirmação de Consulta"
+        upcoming_with: "Sua próxima consulta com %{nutritionist_name}"
+        greeting: "Olá %{guest_name},"
+        reminder_message: "Este é um lembrete amigável sobre sua próxima consulta com %{nutritionist_name}. Estamos ansiosos para conhecê-lo!"
+        appointment_details: "Detalhes da Consulta"
+        nutritionist: "Nutricionista"
+        service: "Serviço"
+        date_time: "Data e Hora"
+        duration: "Duração"
+        minutes: "60 minutos"
+        location: "Localização"
+        investment: "Investimento"
+        what_to_bring: "O que Trazer"
+        bring_items:
+          - "Quaisquer relatórios médicos recentes ou resultados de exames relacionados às suas necessidades nutricionais"
+          - "Uma lista de medicamentos e suplementos que você está tomando atualmente"
+          - "Seu diário alimentar (se você estiver mantendo um)"
+          - "Quaisquer perguntas que você tenha sobre seus objetivos nutricionais"
+          - "Uma forma de pagamento (cartão de crédito, dinheiro ou informações de seguro)"
+        cancel_reschedule: "Precisa cancelar ou remarcar?"
+        cancel_policy: "Se você precisar alterar sua consulta, entre em contato conosco com pelo menos 24 horas de antecedência para evitar qualquer taxa de cancelamento."
+        calendar_reminder: "Adicione ao seu calendário para garantir que não se esqueça!"
+        calendar_message: "Clique em um dos botões abaixo para adicionar esta consulta ao seu calendário:"
+        google_calendar: "Google Calendar"
+        ical_outlook: "iCal/Outlook"
+        quick_checkin: "Para check-in rápido"
+        qr_message: "Mostre este código QR quando chegar:"
+        contact_questions: "Se tiver alguma dúvida antes da sua consulta, sinta-se à vontade para entrar em contato conosco. Estamos aqui para ajudar a tornar sua experiência o mais tranquila possível."
+        looking_forward: "Esperamos vê-lo em breve!"
+        signature: "Atenciosamente,"
+        team: "A Equipe Nutrium"
+        footer_sent: "Este email foi enviado em %{date}"
+        footer_company: "Nutrium - Seu Parceiro de Nutrição"
+
+  # API responses
+  api:
+    appointments:
+      created: "Consulta criada com sucesso"
+      accepted: "Consulta aceita com sucesso"
+      rejected: "Consulta rejeitada com sucesso"
+      not_found: "Consulta não encontrada"
+    nutritionist_services:
+      not_found: "Nenhum serviço de nutricionista encontrado"
+    errors:
+      general: "Ocorreu um erro"
+      record_not_found: "Recurso não encontrado"
+      validation_error: "Erro de validação"

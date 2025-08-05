@@ -28,4 +28,169 @@
 #       enabled: "ON"
 
 en:
-  hello: "Hello world"
+  activerecord:
+    models:
+      appointment: "Appointment"
+      guest: "Guest"
+      location: "Location"
+      nutritionist: "Nutritionist"
+      nutritionist_service: "Nutritionist Service"
+      service: "Service"
+    attributes:
+      appointment:
+        state: "State"
+        event_date: "Appointment Date"
+        guest: "Guest"
+        nutritionist_service: "Nutritionist Service"
+      guest:
+        name: "Name"
+        email: "Email"
+      location:
+        full_address: "Full Address"
+        city: "City"
+        coordinates: "Coordinates"
+      nutritionist:
+        name: "Name"
+        title: "Title"
+        license_number: "License Number"
+      nutritionist_service:
+        pricing: "Price"
+        delivery_method: "Delivery Method"
+      service:
+        name: "Name"
+    errors:
+      models:
+        appointment:
+          attributes:
+            event_date:
+              past: "cannot be in the past"
+              blank: "must be provided"
+        guest:
+          attributes:
+            email:
+              invalid: "format is invalid"
+              blank: "must be provided"
+            name:
+              blank: "must be provided"
+
+  enums:
+    appointment:
+      state:
+        pending: "Pending"
+        accepted: "Accepted"
+        rejected: "Rejected"
+    nutritionist_service:
+      delivery_method:
+        in_person: "In Person"
+        online: "Online"
+
+  # Emails
+  emails:
+    appointment_mailer:
+      appointment_accepted:
+        subject: "✅ Your appointment with %{nutritionist_name} has been accepted"
+        appointment_confirmed: "Appointment Confirmed!"
+        greeting: "Great news, %{guest_name}! Your appointment has been accepted."
+        message: "Excellent news! %{nutritionist_name} has accepted your appointment request. We're excited to help you on your nutrition journey!"
+        appointment_details: "Appointment Details"
+        nutritionist: "Nutritionist"
+        service: "Service"
+        date_time: "Date & Time"
+        location: "Location"
+        investment: "Investment"
+        preparing_title: "Preparing for Your Appointment"
+        preparing_tips:
+          - "Please arrive 10 minutes early to complete any necessary paperwork"
+          - "Bring any relevant medical records, lab results, or current medications list"
+          - "Prepare a 3-day food diary if possible"
+          - "Write down any specific questions or concerns you'd like to discuss"
+          - "Wear comfortable clothing if body measurements will be taken"
+        need_changes: "Need to make changes to your appointment?"
+        contact_message: "Contact your nutritionist directly if you need to reschedule or have any questions."
+        closing: "We're looking forward to supporting you on your wellness journey. If you have any questions before your appointment, don't hesitate to reach out."
+        signature: "Best regards,"
+        team: "The Nutrium Team"
+        footer_sent: "This email was sent regarding your appointment request on %{date}"
+        footer_company: "Nutrium - Your Nutrition Partner"
+
+      appointment_rejected:
+        subject: "📅 Your appointment request with %{nutritionist_name}"
+        appointment_request_update: "Appointment Request Update"
+        update_message: "We have an update regarding your appointment request"
+        greeting: "Hello %{guest_name},"
+        message: "Thank you for your interest in scheduling an appointment with %{nutritionist_name}. Unfortunately, they are unable to accommodate your requested time slot."
+        request_not_available: "Request Not Available"
+        alternative_message: "Your requested appointment time is not available, but we have alternatives!"
+        original_request: "Your Original Request"
+        nutritionist: "Nutritionist"
+        service: "Service"
+        requested_date: "Requested Date"
+        investment: "Investment"
+        what_next: "What You Can Do Next"
+        next_steps:
+          - "Try a different time: Consider requesting a different date or time slot with the same nutritionist"
+          - "Browse other nutritionists: Explore our other qualified professionals who offer the same service"
+          - "Join the waitlist: We can notify you if this time slot becomes available"
+          - "Get recommendations: Our team can suggest the best available alternatives for your needs"
+        find_perfect_appointment: "Ready to Find Your Perfect Appointment?"
+        dont_stop: "Don't let this stop you from achieving your health goals!"
+        browse_times: "Browse Available Times"
+        find_others: "Find Other Nutritionists"
+        remember: "Remember:"
+        new_request_info: "You can submit a new appointment request at any time. Each new request will cancel any previous pending requests, so you'll always have the most up-to-date booking in our system."
+        closing: "We understand this might be disappointing, but we're committed to helping you find the perfect nutritionist match. Our team is here to support you every step of the way."
+        thank_you: "Thank you for choosing Nutrium for your nutrition journey!"
+        signature: "Best regards,"
+        team: "The Nutrium Team"
+        footer_processed: "Request processed on %{date_time}"
+        footer_company: "Nutrium - Your Nutrition Partner"
+
+      appointment_confirmation:
+        subject: "🔔 Appointment Confirmation - %{service_name} with %{nutritionist_name}"
+        appointment_confirmation: "Appointment Confirmation"
+        upcoming_with: "Your upcoming appointment with %{nutritionist_name}"
+        greeting: "Hello %{guest_name},"
+        reminder_message: "This is a friendly reminder about your upcoming appointment with %{nutritionist_name}. We're looking forward to meeting you!"
+        appointment_details: "Appointment Details"
+        nutritionist: "Nutritionist"
+        service: "Service"
+        date_time: "Date & Time"
+        duration: "Duration"
+        minutes: "60 minutes"
+        location: "Location"
+        investment: "Investment"
+        what_to_bring: "What to Bring"
+        bring_items:
+          - "Any recent medical reports or test results related to your nutrition needs"
+          - "A list of medications and supplements you're currently taking"
+          - "Your food journal (if you've been keeping one)"
+          - "Any questions you have about your nutrition goals"
+          - "A form of payment (credit card, cash, or insurance information)"
+        cancel_reschedule: "Need to cancel or reschedule?"
+        cancel_policy: "If you need to change your appointment, please contact us at least 24 hours in advance to avoid any cancellation fees."
+        calendar_reminder: "Add to your calendar to make sure you don't forget!"
+        calendar_message: "Click one of the buttons below to add this appointment to your calendar:"
+        google_calendar: "Google Calendar"
+        ical_outlook: "iCal/Outlook"
+        quick_checkin: "For quick check-in"
+        qr_message: "Show this QR code when you arrive:"
+        contact_questions: "If you have any questions before your appointment, feel free to contact us. We're here to help make your experience as smooth as possible."
+        looking_forward: "We look forward to seeing you soon!"
+        signature: "Best regards,"
+        team: "The Nutrium Team"
+        footer_sent: "This email was sent on %{date}"
+        footer_company: "Nutrium - Your Nutrition Partner"
+
+  # API responses
+  api:
+    appointments:
+      created: "Appointment created successfully"
+      accepted: "Appointment accepted successfully"
+      rejected: "Appointment rejected successfully"
+      not_found: "Appointment not found"
+    nutritionist_services:
+      not_found: "No nutritionist services found"
+    errors:
+      general: "An error occurred"
+      record_not_found: "Resource not found"
+      validation_error: "Validation error"

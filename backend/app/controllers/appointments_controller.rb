@@ -6,7 +6,10 @@ class AppointmentsController < ApplicationController
   def create
     result = CreateAppointmentService.new(appointment_params).perform
     if result.success?
-      render json: result.appointment, serializer: AppointmentSerializer, status: :created
+      render json: {
+        message: I18n.t('api.appointments.created'),
+        appointment: ActiveModelSerializers::SerializableResource.new(result.appointment, serializer: AppointmentSerializer)
+      }, status: :created
     else
       render json: {
         errors: result.errors
@@ -18,9 +21,12 @@ class AppointmentsController < ApplicationController
     result = AcceptAppointmentService.new(@appointment).perform
 
     if result.success?
-      render json: result.appointment, serializer: AppointmentSerializer
+      render json: {
+        message: I18n.t('api.appointments.accepted'),
+        appointment: ActiveModelSerializers::SerializableResource.new(result.appointment, serializer: AppointmentSerializer)
+      }
     else
-      render json: { errors: result.errors }, serializer: AppointmentSerializer
+      render json: { errors: result.errors }, status: :unprocessable_content
     end
   end
 
@@ -28,9 +34,12 @@ class AppointmentsController < ApplicationController
     result = RejectAppointmentService.new(@appointment).perform
 
     if result.success?
-      render json: result.appointment, serializer: AppointmentSerializer
+      render json: {
+        message: I18n.t('api.appointments.rejected'),
+        appointment: ActiveModelSerializers::SerializableResource.new(result.appointment, serializer: AppointmentSerializer)
+      }
     else
-      render json: { errors: result.errors }, serializer: AppointmentSerializer
+      render json: { errors: result.errors }, status: :unprocessable_content
     end
   end
 

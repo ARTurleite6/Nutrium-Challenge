@@ -1,6 +1,7 @@
 import { Calendar, Clock } from "lucide-react";
 import type { Appointment } from "../types";
 import Avatar from "./Avatar";
+import { useTranslation } from "react-i18next";
 
 interface Props {
   appointment: Appointment;
@@ -11,6 +12,8 @@ const PendingAppointmentCard: React.FC<Props> = ({
   appointment,
   onAnswerRequest,
 }) => {
+  const { t } = useTranslation();
+  console.dir(appointment);
   const formattedDate = new Date(appointment.event_date).toLocaleDateString(
     "en-US",
     {
@@ -58,7 +61,7 @@ const PendingAppointmentCard: React.FC<Props> = ({
             onClick={() => onAnswerRequest(appointment)}
             className="text-emerald-600 hover:text-emerald-700 text-sm font-medium hover:underline"
           >
-            Answer request
+            {t("pendingAppointments.answerRequest")}
           </button>
         </div>
       </div>
