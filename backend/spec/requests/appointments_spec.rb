@@ -110,7 +110,7 @@ RSpec.describe 'Appointments', type: :request do
           expect(response).to have_http_status(:unprocessable_content)
           expect(json['errors']).to include('appointment')
           expect(json['errors']['appointment']).to eq({
-                                                        'nutritionist_service' => ['must exist'],
+                                                        'nutritionist_service' => ['must exist']
                                                       })
         end
       end
